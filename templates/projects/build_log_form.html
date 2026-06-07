@@ -1,0 +1,25 @@
+{% extends "base/base.html" %}
+{% block title %}{{ title }} - ObsoleteHQ{% endblock %}
+{% block content %}
+<section class="container-page py-10">
+  <div class="max-w-3xl">
+    <span class="badge-soft">Private Dev Log</span>
+    <h1 class="mt-4 text-4xl font-black tracking-[-0.035em]">{{ title }}</h1>
+    <p class="mt-2 text-ink-soft">Track what you did, what clicked, what changed, or what you want to remember next time.</p>
+  </div>
+  <form class="form-panel mt-6 max-w-3xl" method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    {% if learning_experience %}<input type="hidden" name="learning_experience" value="{{ learning_experience.id }}">{% endif %}
+    <div class="rich-text-field" data-rich-text-field>
+      <div class="rich-text-editor" data-rich-text-editor data-placeholder="What did you do or learn?"></div>
+      {{ form.what_built }}
+      {% if form.what_built.errors %}<span class="text-sm font-bold text-brand-red">{{ form.what_built.errors|striptags }}</span>{% endif %}
+    </div>
+    <div class="flex flex-wrap gap-3">
+      <button class="btn btn-primary" type="submit">Save Dev Log</button>
+      <a class="btn" href="{% url 'build_log_list' %}">Cancel</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

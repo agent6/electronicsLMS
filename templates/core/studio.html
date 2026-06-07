@@ -1,0 +1,18 @@
+{% extends "base/base.html" %}
+{% block title %}Content Studio - ObsoleteHQ{% endblock %}
+{% block content %}
+<section class="container-page py-10">
+  <div class="flex flex-wrap items-center justify-between gap-4">
+    <div><h1 class="text-4xl font-black tracking-[-0.035em]">Content Studio</h1><p class="mt-2 text-ink-soft">Operational snapshot for staff.</p></div>
+    <a class="btn btn-primary" href="{% url 'admin:index' %}">Open Django admin</a>
+  </div>
+  <div class="mt-8 grid grid-cols-3 gap-4 max-md:grid-cols-1">
+    <article class="stat-card"><strong class="text-3xl">{{ learning_count }}</strong><p>Learning experiences</p></article>
+    <article class="stat-card"><strong class="text-3xl">{{ published_count }}</strong><p>Published experiences</p></article>
+    <article class="stat-card"><strong class="text-3xl">{{ core_week_count }}</strong><p>Core Run weeks</p></article>
+    <article class="stat-card"><strong class="text-3xl">{{ kit_count }}</strong><p>Kits</p></article>
+    <article class="stat-card"><strong class="text-3xl">{{ component_count }}</strong><p>Components</p></article>
+    <article class="stat-card"><strong class="text-3xl">{{ safety_count }}</strong><p>Safety warnings</p></article>
+  </div>
+</section>
+{% endblock %}

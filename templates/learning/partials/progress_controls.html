@@ -1,0 +1,10 @@
+<div class="card p-5" id="progress-controls">
+  <h2 class="text-xl font-black">Checkpoint</h2>
+  <p class="mt-2 text-sm text-ink-soft">Current status: <strong>{{ progress.get_status_display|default:"Not started" }}</strong></p>
+  <form class="mt-4 flex flex-wrap gap-3" method="post" action="{% url 'update_learning_progress' experience.slug %}" hx-post="{% url 'update_learning_progress' experience.slug %}" hx-target="#progress-controls" hx-swap="outerHTML">
+    {% csrf_token %}
+    <button class="btn" name="action" value="start" type="submit">Mark in progress</button>
+    <button class="btn btn-primary" name="action" value="complete" type="submit">Mark complete</button>
+    <button class="btn" name="action" value="later" type="submit">Come back later</button>
+  </form>
+</div>

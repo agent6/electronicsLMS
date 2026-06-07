@@ -1,0 +1,171 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block title %}ObsoleteHQ - Learn electronics by building real things{% endblock %}
+{% block content %}
+<section class="border-b border-line">
+  <div class="container-page grid min-h-[500px] grid-cols-[1.06fr_1fr] items-center gap-8 py-10 max-lg:grid-cols-1">
+    <div>
+      <h1 class="max-w-4xl text-[clamp(3rem,4.8vw,4.25rem)] font-black leading-[0.98] tracking-[-0.045em]">
+        Learn electronics by building <span class="text-brand-blue">real things.</span>
+      </h1>
+      <p class="mt-7 max-w-2xl text-xl leading-8 text-ink-soft">Start with one blinking LED. Build your way to sensors, displays, motors, RFID, Wi-Fi, and your own invention.</p>
+      <div class="mt-8 flex flex-wrap gap-4">
+        <a class="btn btn-primary btn-lg" href="{% url 'learn_dashboard' %}">Start Learning</a>
+        <a class="btn btn-lg" href="{% url 'tutorials' %}">Browse Projects</a>
+      </div>
+      <div class="mt-8 flex flex-wrap gap-6 text-sm font-extrabold text-muted">
+        <span>Self-paced</span>
+        <span>Student-owned</span>
+        <span>Built for teen makers</span>
+      </div>
+    </div>
+    <div class="relative min-h-[400px] overflow-visible max-lg:min-h-[340px] max-sm:min-h-[250px]" aria-hidden="true">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_55%_48%,rgba(10,104,255,0.12),transparent_45%)]"></div>
+      <img
+        class="relative ml-auto h-auto w-full max-w-[720px] mix-blend-multiply drop-shadow-[0_32px_45px_rgba(17,48,96,0.18)] max-lg:mx-auto"
+        src="{% static 'img/hero-electronics-kit.png' %}"
+        alt=""
+      >
+    </div>
+  </div>
+</section>
+<section class="container-page py-8">
+  <div class="grid grid-cols-[0.78fr_1.22fr] gap-10 max-lg:grid-cols-1">
+    <div>
+      <h2 class="section-title">How it works</h2>
+      <div class="grid grid-cols-3 gap-4 max-md:grid-cols-1">
+        <article class="card p-5">
+          <div class="grid aspect-square place-items-center overflow-hidden asset-surface">
+            <img class="h-full w-full object-contain" src="{% static 'img/landing/how-basics.png' %}" alt="" loading="lazy">
+          </div>
+          <span class="badge-soft mt-4">1</span><h3 class="mt-4 font-black">Start with the basics</h3><p class="mt-2 text-sm text-ink-soft">Learn setup, breadboards, safety, and MicroPython.</p>
+        </article>
+        <article class="card p-5">
+          <div class="grid aspect-square place-items-center overflow-hidden asset-surface">
+            <img class="h-full w-full object-contain" src="{% static 'img/landing/how-core-run.png' %}" alt="" loading="lazy">
+          </div>
+          <span class="badge-soft mt-4">2</span><h3 class="mt-4 font-black">Build through the Core Run</h3><p class="mt-2 text-sm text-ink-soft">A guided 21-stop path from blink to student-choice projects.</p>
+        </article>
+        <article class="card p-5">
+          <div class="grid aspect-square place-items-center overflow-hidden asset-surface">
+            <img class="h-full w-full object-contain" src="{% static 'img/landing/how-explore.png' %}" alt="" loading="lazy">
+          </div>
+          <span class="badge-soft mt-4">3</span><h3 class="mt-4 font-black">Explore A la Carte</h3><p class="mt-2 text-sm text-ink-soft">Pick projects anytime by interest, part, or skill.</p>
+        </article>
+      </div>
+    </div>
+    <div>
+      <h2 class="section-title">What you'll build</h2>
+      <div class="grid grid-cols-6 gap-3 max-lg:grid-cols-3 max-sm:grid-cols-1">
+        <article class="card px-3 py-4 text-center font-black"><img class="mx-auto mb-4 aspect-square w-full rounded-2xl object-contain" src="{% static 'img/landing/build-led-rgb.png' %}" alt="" loading="lazy">LED and RGB projects</article>
+        <article class="card px-3 py-4 text-center font-black"><img class="mx-auto mb-4 aspect-square w-full rounded-2xl object-contain" src="{% static 'img/landing/build-sensors.png' %}" alt="" loading="lazy">Sensor projects</article>
+        <article class="card px-3 py-4 text-center font-black"><img class="mx-auto mb-4 aspect-square w-full rounded-2xl object-contain" src="{% static 'img/landing/build-displays.png' %}" alt="" loading="lazy">Displays and dashboards</article>
+        <article class="card bg-[#fff8f1] px-3 py-4 text-center font-black"><img class="mx-auto mb-4 aspect-square w-full rounded-2xl object-contain" src="{% static 'img/landing/build-motion.png' %}" alt="" loading="lazy">Motion and motors</article>
+        <article class="card bg-[#fbf7ff] px-3 py-4 text-center font-black"><img class="mx-auto mb-4 aspect-square w-full rounded-2xl object-contain" src="{% static 'img/landing/build-rfid.png' %}" alt="" loading="lazy">RFID and security</article>
+        <article class="card px-3 py-4 text-center font-black"><img class="mx-auto mb-4 aspect-square w-full rounded-2xl object-contain" src="{% static 'img/landing/build-wifi.png' %}" alt="" loading="lazy">Wi-Fi and IoT</article>
+      </div>
+    </div>
+  </div>
+  <div class="card mt-8 grid grid-cols-[280px_1fr] items-center gap-8 bg-gradient-to-r from-white to-[#f5fbff] p-8 max-lg:grid-cols-1">
+    <div>
+      <h2 class="section-title">21-Stop Core Run</h2>
+      <p class="text-ink-soft">Follow the recommended path at your own pace. Move faster, slower, or jump into any published project.</p>
+      <a class="btn mt-5" href="{% url 'core_run' %}">Explore the Core Run</a>
+    </div>
+    <div class="relative">
+      <div class="absolute left-10 right-10 top-10 h-1 rounded-full bg-gradient-to-r from-brand-cyan via-brand-blue to-brand-red max-md:hidden"></div>
+      <div class="relative grid grid-cols-6 gap-4 text-center text-sm font-black max-md:grid-cols-2">
+        <article>
+          <img class="relative z-10 mx-auto mb-3 h-20 w-20 rounded-2xl border-4 border-white bg-[#f6fbff] object-contain shadow-soft" src="{% static 'img/landing/core-setup.png' %}" alt="" loading="lazy">
+          <span>1<br>Setup</span>
+        </article>
+        <article>
+          <img class="relative z-10 mx-auto mb-3 h-20 w-20 rounded-2xl border-4 border-white bg-[#f6fbff] object-contain shadow-soft" src="{% static 'img/landing/core-leds.png' %}" alt="" loading="lazy">
+          <span>2<br>LEDs</span>
+        </article>
+        <article>
+          <img class="relative z-10 mx-auto mb-3 h-20 w-20 rounded-2xl border-4 border-white bg-[#f6fbff] object-contain shadow-soft" src="{% static 'img/landing/core-sensors.png' %}" alt="" loading="lazy">
+          <span>4<br>Sensors</span>
+        </article>
+        <article>
+          <img class="relative z-10 mx-auto mb-3 h-20 w-20 rounded-2xl border-4 border-white bg-[#f6fbff] object-contain shadow-soft" src="{% static 'img/landing/core-displays.png' %}" alt="" loading="lazy">
+          <span>8<br>Displays</span>
+        </article>
+        <article>
+          <img class="relative z-10 mx-auto mb-3 h-20 w-20 rounded-2xl border-4 border-white bg-[#f6fbff] object-contain shadow-soft" src="{% static 'img/landing/core-motion.png' %}" alt="" loading="lazy">
+          <span>11<br>Motion</span>
+        </article>
+        <article>
+          <img class="relative z-10 mx-auto mb-3 h-20 w-20 rounded-2xl border-4 border-white bg-[#f6fbff] object-contain shadow-soft" src="{% static 'img/landing/core-capstone.png' %}" alt="" loading="lazy">
+          <span>21<br>Invention</span>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="container-page py-4">
+  <div class="grid grid-cols-2 gap-7 max-lg:grid-cols-1">
+    <div>
+      <h2 class="section-title">Why students keep going</h2>
+      <div class="grid grid-cols-4 gap-3 max-md:grid-cols-2">
+        <article class="card p-5 text-center"><img class="mx-auto mb-4 h-24 w-24 rounded-2xl object-contain" src="{% static 'img/landing/motivation-momentum.png' %}" alt="" loading="lazy"><h3 class="font-black">Momentum</h3><p class="mt-2 text-sm text-ink-soft">Meaningful sessions without streak pressure.</p></article>
+        <article class="card p-5 text-center"><img class="mx-auto mb-4 h-24 w-24 rounded-2xl object-contain" src="{% static 'img/landing/motivation-badge.png' %}" alt="" loading="lazy"><h3 class="font-black">XP and badges</h3><p class="mt-2 text-sm text-ink-soft">Rewards for real achievements.</p></article>
+        <article class="card p-5 text-center"><img class="mx-auto mb-4 h-24 w-24 rounded-2xl object-contain" src="{% static 'img/landing/motivation-dev-log.png' %}" alt="" loading="lazy"><h3 class="font-black">Dev Log</h3><p class="mt-2 text-sm text-ink-soft">Document what worked and changed.</p></article>
+        <article class="card p-5 text-center"><img class="mx-auto mb-4 h-24 w-24 rounded-2xl object-contain" src="{% static 'img/landing/motivation-passport.png' %}" alt="" loading="lazy"><h3 class="font-black">Project passport</h3><p class="mt-2 text-sm text-ink-soft">Track skills and projects.</p></article>
+      </div>
+    </div>
+    <div>
+      <h2 class="section-title">Safety-first learning</h2>
+      <div class="card grid grid-cols-4 gap-3 bg-[#f7ffff] p-6 max-md:grid-cols-2">
+        <article class="text-center">
+          <img class="mx-auto mb-3 h-20 w-20 rounded-2xl object-contain" src="{% static 'img/landing/safety-33v.png' %}" alt="" loading="lazy">
+          <h3 class="font-black">3.3V friendly</h3><p class="mt-2 text-sm text-ink-soft">Low-voltage learning.</p>
+        </article>
+        <article class="text-center">
+          <img class="mx-auto mb-3 h-20 w-20 rounded-2xl object-contain" src="{% static 'img/landing/safety-low-voltage.png' %}" alt="" loading="lazy">
+          <h3 class="font-black">Low-voltage first</h3><p class="mt-2 text-sm text-ink-soft">Projects you can trust.</p>
+        </article>
+        <article class="text-center">
+          <img class="mx-auto mb-3 h-20 w-20 rounded-2xl object-contain" src="{% static 'img/landing/safety-wiring.png' %}" alt="" loading="lazy">
+          <h3 class="font-black">Wiring checks</h3><p class="mt-2 text-sm text-ink-soft">Check before powering up.</p>
+        </article>
+        <article class="text-center">
+          <img class="mx-auto mb-3 h-20 w-20 rounded-2xl object-contain" src="{% static 'img/landing/safety-privacy.png' %}" alt="" loading="lazy">
+          <h3 class="font-black">Privacy basics</h3><p class="mt-2 text-sm text-ink-soft">Protect yourself online.</p>
+        </article>
+      </div>
+    </div>
+  </div>
+  <div class="mt-8">
+    <h2 class="section-title">Recommended kits</h2>
+    <div class="grid grid-cols-2 gap-4 max-md:grid-cols-1">
+      {% for kit in kits %}
+        <a class="card grid grid-cols-[150px_1fr] gap-5 p-5 transition hover:-translate-y-0.5 hover:border-brand-blue/50 hover:shadow-lift focus:outline-none focus:ring-4 focus:ring-brand-blue/20 max-sm:grid-cols-1" href="{{ kit.url }}" target="_blank" rel="noopener noreferrer nofollow" aria-label="Buy {{ kit.name }} on Amazon">
+          <div class="grid min-h-36 place-items-center overflow-hidden asset-surface max-sm:min-h-48">
+            {% if "Sensor" in kit.name %}
+              <img class="h-full w-full object-contain" src="{% static 'img/landing/kit-sensors.png' %}" alt="" loading="lazy">
+            {% else %}
+              <img class="h-full w-full object-contain" src="{% static 'img/landing/kit-pico.png' %}" alt="" loading="lazy">
+            {% endif %}
+          </div>
+          <div>
+            <h3 class="font-black">{{ kit.name }}</h3>
+            <p class="mt-2 text-sm text-ink-soft">{{ kit.description|default:"Recommended hardware for the ObsoleteHQ path." }}</p>
+            <span class="mt-4 inline-flex text-sm font-extrabold text-brand-blue">Buy on Amazon</span>
+          </div>
+        </a>
+      {% empty %}
+        <article class="empty-state col-span-2">Run the seed command to add recommended kits.</article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+<section class="container-page py-8">
+  <div class="rounded-card bg-gradient-to-r from-[#06143f] to-brand-blue p-8 text-white shadow-lift">
+    <div class="flex flex-wrap items-center justify-between gap-6">
+      <div><h2 class="text-4xl font-black tracking-[-0.035em]">Ready to make old assumptions obsolete?</h2><p class="mt-3 text-[#dceaff]">Start your first build, follow the Core Run, and create projects you can actually show off.</p></div>
+      <a class="btn btn-on-dark btn-lg" href="{% url 'learn_dashboard' %}">Start Learning</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

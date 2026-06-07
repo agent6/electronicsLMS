@@ -1,0 +1,22 @@
+{% extends "base/base.html" %}
+{% block title %}{{ week.title }} - ObsoleteHQ{% endblock %}
+{% block content %}
+<section class="container-page py-10">
+  <span class="badge-soft">Week {{ week.week_number }}</span>
+  <h1 class="mt-4 text-4xl font-black tracking-[-0.035em]">{{ week.title }}</h1>
+  <p class="mt-3 max-w-3xl text-ink-soft">{{ week.goal|default:week.summary }}</p>
+  <div class="mt-8 grid grid-cols-[1fr_320px] gap-6 max-lg:grid-cols-1">
+    <div>
+      <h2 class="section-title">Anchor learning experiences</h2>
+      {% with experiences=anchors %}{% include "learning/partials/experience_grid.html" %}{% endwith %}
+      <h2 class="section-title mt-8">Optional bonus</h2>
+      {% if bonus %}{% with experiences=bonus %}{% include "learning/partials/experience_grid.html" %}{% endwith %}{% else %}<div class="empty-state">Bonus projects will appear when published.</div>{% endif %}
+    </div>
+    <aside class="card p-5">
+      <h2 class="text-xl font-black">Week checkpoint</h2>
+      <p class="mt-2 text-sm text-ink-soft">Complete the anchor lessons, write a Dev Log, and keep momentum moving.</p>
+      <a class="btn btn-primary mt-5" href="{% url 'build_log_create' %}">Write Dev Log</a>
+    </aside>
+  </div>
+</section>
+{% endblock %}

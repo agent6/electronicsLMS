@@ -1,0 +1,22 @@
+{% extends "base/base.html" %}
+{% block title %}Safety Center - ObsoleteHQ{% endblock %}
+{% block content %}
+<section class="container-page py-10">
+  <h1 class="text-4xl font-black tracking-[-0.035em]">Safety Center</h1>
+  <p class="mt-2 max-w-3xl text-ink-soft">ObsoleteHQ keeps hardware learning low-voltage, clear, and beginner-safe without making it scary.</p>
+  <div class="mt-8 grid grid-cols-3 gap-4 max-lg:grid-cols-2 max-sm:grid-cols-1">
+    <article class="card p-6"><h2 class="text-xl font-black">3.3V GPIO</h2><p class="mt-2 text-ink-soft">Pico 2 W GPIO is 3.3V. Do not feed 5V signals into GPIO pins.</p></article>
+    <article class="card p-6"><h2 class="text-xl font-black">Motors and pumps</h2><p class="mt-2 text-ink-soft">Do not power motors, pumps, or relays directly from GPIO. Use drivers and external power.</p></article>
+    <article class="card p-6"><h2 class="text-xl font-black">Relays</h2><p class="mt-2 text-ink-soft">Beginner relay projects stay low-voltage DC only.</p></article>
+    <article class="card p-6"><h2 class="text-xl font-black">Lasers and flame sensors</h2><p class="mt-2 text-ink-soft">Use eye safety for lasers and never create unsafe fire activities.</p></article>
+    <article class="card p-6"><h2 class="text-xl font-black">Water and batteries</h2><p class="mt-2 text-ink-soft">Keep water controlled and treat LiPo charging as careful supervised work.</p></article>
+    <article class="card p-6"><h2 class="text-xl font-black">Responsible sharing</h2><p class="mt-2 text-ink-soft">Use display names and avoid personal details in public project text.</p></article>
+  </div>
+  {% if warnings %}
+    <h2 class="section-title mt-10">Published safety cards</h2>
+    <div class="grid grid-cols-3 gap-4 max-lg:grid-cols-2 max-sm:grid-cols-1">
+      {% for warning in warnings %}<article class="card p-5"><span class="badge-soft">{{ warning.severity }}</span><h3 class="mt-4 font-black">{{ warning.title }}</h3><p class="mt-2 text-sm text-ink-soft">{{ warning.body }}</p></article>{% endfor %}
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

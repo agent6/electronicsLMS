@@ -1,0 +1,9 @@
+{% extends "base/base.html" %}
+{% block title %}Tutorials - ObsoleteHQ{% endblock %}
+{% block content %}
+<section class="container-page py-10">
+  <h1 class="text-4xl font-black tracking-[-0.035em]">{{ title }}</h1>
+  <p class="mt-2 text-ink-soft">Only published learning experiences are shown here.</p>
+  <div class="mt-8">{% include "learning/partials/experience_grid.html" %}</div>
+</section>
+{% endblock %}

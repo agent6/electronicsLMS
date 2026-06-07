@@ -1,0 +1,26 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block title %}Set up ObsoleteHQ{% endblock %}
+{% block content %}
+<section class="container-page grid min-h-[calc(100vh-180px)] place-items-center py-12">
+  <div class="grid w-full max-w-4xl grid-cols-[0.9fr_1.1fr] overflow-hidden rounded-card border border-line bg-white shadow-lift max-lg:grid-cols-1">
+    <div class="bg-gradient-to-br from-[#06143f] to-brand-blue p-8 text-white">
+      <div class="brand-link"><img class="brand-mark" src="{% static 'img/brand-mark.png' %}" alt="" aria-hidden="true"><span>Obsolete<span class="brand-accent">HQ</span></span></div>
+      <h1 class="mt-10 text-4xl font-black tracking-[-0.035em]">Create the first admin account.</h1>
+      <p class="mt-4 text-[#dceaff]">This wizard appears only before any user exists. After setup, it locks automatically.</p>
+    </div>
+    <form class="form-panel rounded-none border-0 shadow-none" method="post">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      {% for field in form %}
+        <label class="field-grid">
+          <span class="font-extrabold">{{ field.label }}</span>
+          {{ field }}
+          {% if field.errors %}<span class="text-sm font-bold text-brand-red">{{ field.errors|striptags }}</span>{% endif %}
+        </label>
+      {% endfor %}
+      <button class="btn btn-primary" type="submit">Create admin account</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

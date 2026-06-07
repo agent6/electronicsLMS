@@ -1,0 +1,21 @@
+{% extends "base/base.html" %}
+{% block title %}Core Run - ObsoleteHQ{% endblock %}
+{% block content %}
+<section class="container-page py-10">
+  <h1 class="text-4xl font-black tracking-[-0.035em]">21-Stop Core Run</h1>
+  <p class="mt-2 text-ink-soft">A recommended path. Students can still work on any published lesson at any time.</p>
+  <div class="mt-8 grid grid-cols-3 gap-4 max-lg:grid-cols-2 max-sm:grid-cols-1">
+    {% for week in weeks %}
+      <article class="card p-5">
+        <span class="badge-soft">Week {{ week.week_number }}</span>
+        <h2 class="mt-4 text-xl font-black">{{ week.title }}</h2>
+        <p class="mt-2 text-sm text-ink-soft">{{ week.summary|default:week.goal }}</p>
+        <p class="mt-4 text-sm font-bold text-muted">{{ week.anchor_learning_experiences.count }} anchors · {{ week.optional_bonus_learning_experiences.count }} bonus</p>
+        <a class="btn mt-5" href="{% url 'core_run_week' week.week_number %}">Open week</a>
+      </article>
+    {% empty %}
+      <div class="empty-state col-span-full">Run `python manage.py seed_obsoletehq` to create the Core Run structure.</div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

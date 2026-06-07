@@ -1,0 +1,73 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}ObsoleteHQ{% endblock %}</title>
+    <meta name="description" content="Learn electronics by building real things with MicroPython and Raspberry Pi Pico 2 W.">
+    <link rel="stylesheet" href="{% static 'vendor/quill/quill.snow.css' %}?v=20260607-quill">
+    <link rel="stylesheet" href="{% static 'css/app.css' %}?v=20260607-lesson-card-buttons">
+    <script src="{% static 'vendor/htmx/htmx.min.js' %}" defer></script>
+    <script src="{% static 'vendor/quill/quill.js' %}?v=20260607-quill" defer></script>
+    <script src="{% static 'js/app.js' %}?v=20260607-quill" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container-page nav-wrap">
+        <a class="brand-link" href="{% url 'home' %}" aria-label="ObsoleteHQ home">
+          <img class="brand-mark" src="{% static 'img/brand-mark.png' %}" alt="" aria-hidden="true">
+          <span>Obsolete<span class="brand-accent">HQ</span></span>
+        </a>
+        <nav class="nav-links" aria-label="Primary">
+          <a href="{% url 'tutorials' %}">Curriculum</a>
+          <a href="{% url 'core_run' %}">Core Run</a>
+          <a href="{% url 'parts_index' %}">Parts</a>
+          <a href="{% url 'debug_index' %}">Debug</a>
+          <a href="{% url 'safety_center' %}">Safety</a>
+        </nav>
+        <div class="nav-actions">
+          <button class="btn md:hidden" type="button" data-mobile-menu>Menu</button>
+          {% if user.is_authenticated %}
+            <a class="btn" href="{% url 'profile' %}">Profile</a>
+            <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="btn btn-primary" type="submit">Log out</button></form>
+          {% else %}
+            <a class="btn max-sm:hidden" href="{% url 'login' %}">Log in</a>
+            <a class="btn btn-primary" href="{% url 'login' %}">Start learning</a>
+          {% endif %}
+        </div>
+      </div>
+      <nav class="container-page hidden gap-3 pb-4 md:hidden" data-mobile-nav>
+        <a href="{% url 'tutorials' %}">Curriculum</a>
+        <a href="{% url 'core_run' %}">Core Run</a>
+        <a href="{% url 'parts_index' %}">Parts</a>
+        <a href="{% url 'debug_index' %}">Debug</a>
+        <a href="{% url 'safety_center' %}">Safety</a>
+        <a href="{% url 'build_log_list' %}">Dev Log</a>
+      </nav>
+    </header>
+    {% if messages %}
+      <div class="container-page mt-4 grid gap-2">
+        {% for message in messages %}
+          <div class="rounded-lg border border-line bg-white p-4 font-bold text-ink shadow-soft">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    <main>{% block content %}{% endblock %}</main>
+    <footer class="footer">
+      <div class="container-page flex min-h-24 flex-wrap items-center justify-between gap-6 py-6">
+        <a class="brand-link text-xl" href="{% url 'home' %}">
+          <img class="brand-mark h-8 w-8" src="{% static 'img/brand-mark.png' %}" alt="" aria-hidden="true">
+          <span>Obsolete<span class="brand-accent">HQ</span></span>
+        </a>
+        <nav class="flex flex-wrap gap-6 text-sm font-extrabold">
+          <a href="{% url 'tutorials' %}">Curriculum</a>
+          <a href="{% url 'core_run' %}">Core Run</a>
+          <a href="{% url 'parts_index' %}">Parts</a>
+          <a href="{% url 'debug_index' %}">Debug</a>
+          <a href="{% url 'safety_center' %}">Safety</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>

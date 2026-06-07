@@ -1,0 +1,83 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block title %}{{ component.name }} - ObsoleteHQ{% endblock %}
+{% block content %}
+<section class="container-page py-10">
+  <div class="flex flex-wrap gap-2">
+    {% if component.category %}<span class="badge-soft">{{ component.category }}</span>{% endif %}
+    <span class="badge-soft">{{ component.get_signal_type_display }}</span>
+  </div>
+  <h1 class="mt-4 text-4xl font-black tracking-[-0.035em]">{{ component.name }}</h1>
+  <p class="mt-2 max-w-3xl text-ink-soft">{{ component.description }}</p>
+  <div class="mt-8 grid grid-cols-[1fr_360px] gap-6 max-lg:grid-cols-1">
+    <div class="grid gap-4">
+      {% if component.assets.all %}
+        <section class="card p-6">
+          <h2 class="text-xl font-black">Part images</h2>
+          <div class="mt-4 grid grid-cols-2 gap-4 max-md:grid-cols-1">
+            {% for asset in component.assets.all %}
+              <figure class="rounded-card border border-line bg-[#f7fbff] p-4">
+                <img class="h-64 w-full object-contain" src="{% static asset.static_asset_path %}" alt="{{ asset.alt_text }}" loading="lazy">
+                <figcaption class="mt-3 text-sm text-ink-soft">
+                  <strong class="text-ink">{{ asset.title }}.</strong>
+                  {% if asset.caption %} {{ asset.caption }}{% endif %}
+                  {% if asset.source_url %}
+                    <span class="mt-1 block text-xs font-bold text-muted">Image source: <a class="text-brand-blue" href="{{ asset.source_url }}" rel="noopener" target="_blank">{{ asset.source_name|default:"Source image" }}</a></span>
+                  {% endif %}
+                </figcaption>
+              </figure>
+            {% endfor %}
+          </div>
+        </section>
+      {% endif %}
+      <section class="card p-6"><h2 class="text-xl font-black">What it is</h2><p class="mt-3 whitespace-pre-line text-ink-soft">{{ component.description|default:"Part overview not added yet." }}</p></section>
+      <section class="card p-6"><h2 class="text-xl font-black">How students use it</h2><p class="mt-3 whitespace-pre-line text-ink-soft">{{ component.how_it_is_used|default:"Usage notes not added yet." }}</p></section>
+      <section class="card p-6"><h2 class="text-xl font-black">Pins and power</h2><p class="mt-3 whitespace-pre-line text-ink-soft">{{ component.pins|default:"Pin notes not added yet." }}</p><p class="mt-3 text-ink-soft">{{ component.power_requirement }}</p>{% if component.pinout_notes %}<p class="mt-3 whitespace-pre-line text-ink-soft">{{ component.pinout_notes }}</p>{% endif %}</section>
+      <section class="card p-6"><h2 class="text-xl font-black">Voltage and safety</h2><p class="mt-3 whitespace-pre-line text-ink-soft">{{ component.voltage_notes|default:"Use beginner-safe low-voltage wiring guidance." }}</p><p class="mt-3 whitespace-pre-line text-ink-soft">{{ component.safety_notes }}</p></section>
+      {% if component.main_component or component.discrete_parts %}
+        <section class="card p-6"><h2 class="text-xl font-black">Module internals</h2>{% if component.main_component %}<p class="mt-3 text-ink-soft"><strong class="text-ink">Main component:</strong> {{ component.main_component }}</p>{% endif %}{% if component.discrete_parts %}<p class="mt-3 whitespace-pre-line text-ink-soft">{{ component.discrete_parts }}</p>{% endif %}</section>
+      {% endif %}
+      {% if component.datasheet_notes %}
+        <section class="card p-6"><h2 class="text-xl font-black">Datasheet notes</h2><p class="mt-3 whitespace-pre-line text-ink-soft">{{ component.datasheet_notes }}</p></section>
+      {% endif %}
+      {% if component.libraries %}
+        <section class="card p-6"><h2 class="text-xl font-black">Common libraries</h2><p class="mt-3 whitespace-pre-line text-ink-soft">{{ component.libraries }}</p></section>
+      {% endif %}
+      <section class="card p-6"><h2 class="text-xl font-black">Common mistakes</h2><p class="mt-3 whitespace-pre-line text-ink-soft">{{ component.common_mistakes|default:"Common mistakes will be added by content authors." }}</p></section>
+    </div>
+    <aside class="grid content-start gap-4">
+      <section class="card p-6">
+        <h2 class="text-xl font-black">Resources</h2>
+        <div class="mt-4 grid gap-3">
+          {% if component.source_url %}<a class="rounded-lg border border-line p-3 font-bold" href="{{ component.source_url }}" rel="noopener" target="_blank">{{ component.source_name|default:"Source documentation" }}</a>{% endif %}
+          {% for resource in component.resources.all %}
+            <a class="rounded-lg border border-line p-3" href="{{ resource.url }}" rel="noopener" target="_blank">
+              <span class="block font-black">{{ resource.title }}</span>
+              <span class="mt-1 block text-sm text-muted">{{ resource.get_resource_type_display }}</span>
+              {% if resource.notes %}<span class="mt-1 block text-sm text-ink-soft">{{ resource.notes }}</span>{% endif %}
+            </a>
+          {% empty %}
+            {% if not component.source_url %}<p class="text-ink-soft">Resources are being validated.</p>{% endif %}
+          {% endfor %}
+        </div>
+      </section>
+      {% if component.attribution %}
+        <section class="card p-6">
+          <h2 class="text-xl font-black">Attribution</h2>
+          <p class="mt-3 whitespace-pre-line text-sm text-ink-soft">{{ component.attribution }}</p>
+        </section>
+      {% endif %}
+      <section class="card p-6">
+        <h2 class="text-xl font-black">Published lessons using this part</h2>
+        <div class="mt-4 grid gap-3">
+          {% for experience in related %}
+            <a class="rounded-lg border border-line p-3 font-bold" href="{{ experience.get_absolute_url }}">{{ experience.title }}</a>
+          {% empty %}
+            <p class="text-ink-soft">No published lessons use this part yet.</p>
+          {% endfor %}
+        </div>
+      </section>
+    </aside>
+  </div>
+</section>
+{% endblock %}

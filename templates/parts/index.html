@@ -1,0 +1,37 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block title %}Parts Library - ObsoleteHQ{% endblock %}
+{% block content %}
+<section class="container-page py-10">
+  <h1 class="text-4xl font-black tracking-[-0.035em]">Parts Library</h1>
+  <p class="mt-2 text-ink-soft">Search components by part name, signal type, voltage notes, and common mistakes.</p>
+  <form class="card mt-6 grid grid-cols-[1fr_220px_auto] gap-3 p-4 max-md:grid-cols-1" method="get">
+    <input name="q" placeholder="Search parts">
+    <select name="signal"><option value="">All signal types</option>{% for value,label in signal_types %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select>
+    <button class="btn btn-primary" type="submit">Search</button>
+  </form>
+  <div class="mt-8 grid grid-cols-3 gap-4 max-lg:grid-cols-2 max-sm:grid-cols-1">
+    {% for component in components %}
+      <article class="card flex h-full flex-col p-5">
+        {% with primary_asset=component.assets.first %}
+          {% if primary_asset %}
+            <img class="mb-4 h-40 w-full rounded-2xl border border-line bg-[#f7fbff] object-contain p-3" src="{% static primary_asset.static_asset_path %}" alt="{{ primary_asset.alt_text }}" loading="lazy">
+          {% endif %}
+        {% endwith %}
+        <div class="flex grow flex-col">
+        <div class="flex flex-wrap gap-2">
+          <span class="badge-soft">{{ component.get_signal_type_display }}</span>
+          {% if component.category %}<span class="badge-soft">{{ component.category }}</span>{% endif %}
+        </div>
+        <h2 class="mt-4 text-xl font-black">{{ component.name }}</h2>
+        <p class="mt-2 text-sm text-ink-soft">{{ component.description|default:"Component details are ready for content authors." }}</p>
+        <p class="mt-4 text-sm text-muted">{{ component.power_requirement }}</p>
+        </div>
+        <a class="btn mt-5 self-start" href="{% url 'part_detail' component.slug %}">View part</a>
+      </article>
+    {% empty %}
+      <div class="empty-state col-span-full">Run the seed command or add components in admin to populate the parts library.</div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

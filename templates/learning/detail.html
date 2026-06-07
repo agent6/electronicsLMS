@@ -1,0 +1,80 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block title %}{{ experience.title }} - ObsoleteHQ{% endblock %}
+{% block content %}
+<section class="container-page py-10">
+  <div class="grid grid-cols-[1fr_340px] gap-8 max-lg:grid-cols-1">
+    <article>
+      <div class="flex flex-wrap gap-2">
+        <span class="badge-soft">{{ experience.code }}</span>
+        <span class="badge-soft">{{ experience.get_content_type_display }}</span>
+        <span class="badge-soft">{{ experience.get_difficulty_display }}</span>
+      </div>
+      <h1 class="mt-5 text-5xl font-black tracking-[-0.04em] max-sm:text-4xl">{{ experience.title }}</h1>
+      <p class="mt-4 text-xl text-ink-soft">{{ experience.hook|default:experience.summary }}</p>
+      <div class="mt-8 grid gap-5">
+        {% for section in experience.sections.all %}
+          {% if section.published %}
+            <section class="card p-6">
+              <span class="badge-soft">{{ section.get_section_type_display }}</span>
+              <h2 class="mt-4 text-2xl font-black">{{ section.title }}</h2>
+              {% if section.static_asset_path %}
+                {% static section.static_asset_path as section_asset_url %}
+                <figure class="mt-5 overflow-hidden rounded-2xl border border-line bg-[#f7fbff] p-3">
+                  <img class="mx-auto h-auto max-h-[560px] max-w-full object-contain" src="{{ section_asset_url }}" alt="{{ section.static_asset_alt|default:section.title }}" loading="lazy">
+                  {% if section.static_asset_caption or section.static_asset_source_name %}
+                    <figcaption class="mt-3 text-sm text-muted">
+                      {% if section.static_asset_caption %}{{ section.static_asset_caption }}{% endif %}
+                      {% if section.static_asset_source_name %}
+                        <span class="font-bold">Image source:</span>
+                        {% if section.static_asset_source_url %}
+                          <a class="font-bold text-brand-blue" href="{{ section.static_asset_source_url }}" target="_blank" rel="noopener noreferrer nofollow">{{ section.static_asset_source_name }}</a>
+                        {% else %}
+                          <span class="font-bold">{{ section.static_asset_source_name }}</span>
+                        {% endif %}
+                      {% endif %}
+                    </figcaption>
+                  {% endif %}
+                </figure>
+              {% endif %}
+              {% if section.section_type == "code" %}
+                <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-[#061331] p-5 text-sm leading-8 text-[#dceaff]"><code>{{ section.body }}</code></pre>
+              {% else %}
+                <div class="prose-content mt-3 whitespace-pre-line text-ink-soft">{{ section.body|urlize }}</div>
+              {% endif %}
+            </section>
+          {% endif %}
+        {% empty %}
+          <div class="empty-state">This published lesson needs at least one published section. Staff should add lesson content before students use it.</div>
+        {% endfor %}
+      </div>
+    </article>
+    <aside class="grid content-start gap-5 lg:sticky lg:top-28 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto lg:pr-1">
+      <div class="card p-5">
+        <h2 class="text-xl font-black">Lesson details</h2>
+        <dl class="mt-4 grid gap-3 text-sm">
+          <div><dt class="font-black">Track</dt><dd class="text-ink-soft">{{ experience.track }}</dd></div>
+          <div><dt class="font-black">Time</dt><dd class="text-ink-soft">{{ experience.estimated_time }}</dd></div>
+          <div><dt class="font-black">Safety</dt><dd class="text-ink-soft">{{ experience.get_safety_level_display }}</dd></div>
+          {% if experience.required_kits.all %}
+            <div><dt class="font-black">Kit</dt><dd class="text-ink-soft">{% for kit in experience.required_kits.all %}{{ kit.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</dd></div>
+          {% endif %}
+          {% if experience.required_components.all %}
+            <div><dt class="font-black">Parts</dt><dd class="text-ink-soft">{% for component in experience.required_components.all %}{{ component.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</dd></div>
+          {% endif %}
+          {% if experience.safety_warnings.all %}
+            <div><dt class="font-black">Safety notes</dt><dd class="text-ink-soft">{% for warning in experience.safety_warnings.all %}{{ warning.title }}{% if not forloop.last %}, {% endif %}{% endfor %}</dd></div>
+          {% endif %}
+        </dl>
+      </div>
+      {% if user.is_authenticated %}
+        {% include "learning/partials/progress_controls.html" %}
+        <a class="btn" href="{% url 'build_log_create' %}?learning_experience={{ experience.id }}">Create Dev Log</a>
+      {% else %}
+        <div class="card p-5"><p class="text-ink-soft">Log in to track progress and write a private Dev Log.</p><a class="btn btn-primary mt-4" href="{% url 'login' %}">Log in</a></div>
+      {% endif %}
+      {% if next_item %}<a class="btn" href="{{ next_item.get_absolute_url }}">Next: {{ next_item.title }}</a>{% endif %}
+    </aside>
+  </div>
+</section>
+{% endblock %}

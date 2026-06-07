@@ -1,0 +1,14 @@
+{% extends "base/base.html" %}
+{% block title %}Log in - ObsoleteHQ{% endblock %}
+{% block content %}
+<section class="container-page grid min-h-[calc(100vh-180px)] place-items-center py-12">
+  <form class="form-panel w-full max-w-md" method="post">
+    {% csrf_token %}
+    <h1 class="text-3xl font-black tracking-[-0.03em]">Log in</h1>
+    {% if form.errors %}<div class="rounded-lg bg-red-50 p-4 font-bold text-brand-red">Check your username and password.</div>{% endif %}
+    <label class="field-grid"><span class="font-extrabold">Username</span>{{ form.username }}</label>
+    <label class="field-grid"><span class="font-extrabold">Password</span>{{ form.password }}</label>
+    <button class="btn btn-primary" type="submit">Log in</button>
+  </form>
+</section>
+{% endblock %}

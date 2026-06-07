@@ -1,0 +1,13 @@
+{% extends "base/base.html" %}
+{% block title %}Profile - ObsoleteHQ{% endblock %}
+{% block content %}
+<section class="container-page py-10">
+  <h1 class="text-4xl font-black tracking-[-0.035em]">Profile</h1>
+  <form class="form-panel mt-6 max-w-xl" method="post">
+    {% csrf_token %}
+    <label class="field-grid"><span class="font-extrabold">Display name</span><input name="display_name" value="{{ profile.display_name }}" maxlength="80"></label>
+    <div class="rounded-lg bg-[#f7fbff] p-4 text-sm text-ink-soft">Email and username stay private. Public-facing pages should use display names only.</div>
+    <button class="btn btn-primary" type="submit">Save profile</button>
+  </form>
+</section>
+{% endblock %}

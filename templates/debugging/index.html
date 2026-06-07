@@ -1,0 +1,19 @@
+{% extends "base/base.html" %}
+{% block title %}Debugging Help - ObsoleteHQ{% endblock %}
+{% block content %}
+<section class="container-page py-10">
+  <h1 class="text-4xl font-black tracking-[-0.035em]">Debugging Help</h1>
+  <p class="mt-2 text-ink-soft">Search by symptom and get calm first checks.</p>
+  <form class="card mt-6 grid grid-cols-[1fr_auto] gap-3 p-4 max-sm:grid-cols-1" method="get">
+    <input name="q" placeholder="LED does not turn on, Pico not detected, LCD blank...">
+    <button class="btn btn-primary" type="submit">Search</button>
+  </form>
+  <div class="mt-8 grid grid-cols-3 gap-4 max-lg:grid-cols-2 max-sm:grid-cols-1">
+    {% for card in cards %}
+      <article class="card p-5"><h2 class="text-xl font-black">{{ card.title }}</h2><p class="mt-2 text-sm text-ink-soft">{{ card.symptom }}</p><a class="btn mt-5" href="{% url 'debug_detail' card.slug %}">Open card</a></article>
+    {% empty %}
+      <div class="empty-state col-span-full">Debug cards are ready to be added in admin.</div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

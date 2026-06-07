@@ -1,0 +1,16 @@
+{% extends "base/base.html" %}
+{% block title %}A la Carte - ObsoleteHQ{% endblock %}
+{% block content %}
+<section class="container-page py-10">
+  <h1 class="text-4xl font-black tracking-[-0.035em]">A la Carte Library</h1>
+  <form class="card mt-6 grid grid-cols-6 gap-3 p-4 max-lg:grid-cols-2 max-sm:grid-cols-1" method="get" hx-get="{% url 'a_la_carte' %}" hx-target="#experience-grid" hx-swap="outerHTML">
+    <input name="q" placeholder="Search title or summary">
+    <select name="track"><option value="">All tracks</option>{% for track in tracks %}<option value="{{ track.id }}">{{ track.title }}</option>{% endfor %}</select>
+    <select name="content_type"><option value="">All types</option>{% for value,label in content_types %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select>
+    <select name="difficulty"><option value="">All difficulties</option>{% for value,label in difficulties %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select>
+    <select name="kit"><option value="">All kits</option>{% for kit in kits %}<option value="{{ kit.id }}">{{ kit.name }}</option>{% endfor %}</select>
+    <button class="btn btn-primary" type="submit">Filter</button>
+  </form>
+  <div class="mt-8">{% include "learning/partials/experience_grid.html" %}</div>
+</section>
+{% endblock %}

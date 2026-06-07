@@ -1,0 +1,98 @@
+{% extends "base/base.html" %}
+{% block title %}Learn - ObsoleteHQ{% endblock %}
+{% block content %}
+<section class="container-page py-10">
+  <div class="flex flex-wrap items-center justify-between gap-4">
+    <div>
+      <h1 class="text-4xl font-black tracking-[-0.035em]">Welcome back, {{ user.profile.display_name|default:user.username }}.</h1>
+      <p class="mt-2 text-ink-soft">Continue a lesson, log what changed, or update your Project Passport.</p>
+    </div>
+    {% if user.is_staff %}<a class="btn btn-primary" href="{% url 'studio' %}">Content Studio</a>{% endif %}
+  </div>
+
+  <div class="mt-8 grid grid-cols-[1.1fr_0.9fr] gap-5 max-lg:grid-cols-1">
+    <section class="card p-6">
+      <span class="badge-soft">{{ continue_reason|default:"Ready" }}</span>
+      <h2 class="mt-4 text-3xl font-black tracking-[-0.03em]">Continue where you left off</h2>
+      {% if continue_experience %}
+        <h3 class="mt-5 text-xl font-black">{{ continue_experience.title }}</h3>
+        <p class="mt-2 text-ink-soft">{{ continue_experience.summary }}</p>
+        <div class="mt-5 flex flex-wrap gap-3">
+          <a class="btn btn-primary" href="{{ continue_experience.get_absolute_url }}">Continue lesson</a>
+          {% if next_week %}<a class="btn" href="{% url 'core_run_week' next_week.week_number %}">Open Week {{ next_week.week_number }}</a>{% endif %}
+        </div>
+      {% else %}
+        <p class="mt-4 text-ink-soft">Published lessons will appear here when staff add them.</p>
+        <a class="btn btn-primary mt-5" href="{% url 'a_la_carte' %}">Browse library</a>
+      {% endif %}
+    </section>
+
+    <section class="card p-6">
+      <h2 class="text-2xl font-black tracking-[-0.02em]">Quick actions</h2>
+      <div class="mt-5 grid gap-3">
+        <a class="btn btn-primary" href="{% url 'build_log_create' %}">Add Dev Log</a>
+        <a class="btn" href="{% url 'build_log_list' %}">Review Dev Log</a>
+        <a class="btn" href="{% url 'project_list' %}">Project Passport</a>
+        <a class="btn" href="{% url 'project_create' %}">New Project Passport Entry</a>
+      </div>
+    </section>
+  </div>
+
+  <div class="mt-5 grid grid-cols-4 gap-4 max-lg:grid-cols-2 max-sm:grid-cols-1">
+    <article class="stat-card"><strong class="text-3xl">{{ total_xp }}</strong><p>Total XP</p></article>
+    <article class="stat-card"><strong class="text-3xl">{{ momentum_streak }}</strong><p>Momentum streak{% if last_momentum_date %}<br><span class="text-sm font-bold text-muted">Last active {{ last_momentum_date }}</span>{% endif %}</p></article>
+    <article class="stat-card"><strong class="text-3xl">{{ build_log_count }}</strong><p>Private Dev Logs</p></article>
+    <article class="stat-card"><strong class="text-3xl">{{ project_count }}</strong><p>Project Passport</p></article>
+  </div>
+
+  <div class="mt-8 grid grid-cols-2 gap-5 max-lg:grid-cols-1">
+    <section class="card p-6">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <h2 class="section-title mb-0">Recent Dev Logs</h2>
+        <a class="btn" href="{% url 'build_log_list' %}">View all</a>
+      </div>
+      <div class="mt-5 grid gap-3">
+        {% for log in recent_logs %}
+          <article class="rounded-lg border border-line bg-white p-4">
+            <h3 class="font-black">{{ log.title }}</h3>
+            <p class="mt-1 text-sm text-ink-soft">{{ log.what_built|striptags|truncatewords:18 }}</p>
+            <a class="mt-3 inline-flex text-sm font-extrabold text-brand-blue" href="{% url 'build_log_edit' log.pk %}">Edit Dev Log</a>
+          </article>
+        {% empty %}
+          <div class="empty-state">No Dev Logs yet.</div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="card p-6">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <h2 class="section-title mb-0">Project Passport</h2>
+        <a class="btn" href="{% url 'project_list' %}">View all</a>
+      </div>
+      <div class="mt-5 grid gap-3">
+        {% for project in recent_projects %}
+          <article class="rounded-lg border border-line bg-white p-4">
+            <div class="flex flex-wrap gap-2">
+              <span class="badge-soft">{{ project.get_status_display }}</span>
+              {% if project.capstone %}<span class="badge-soft">Capstone</span>{% endif %}
+            </div>
+            <h3 class="mt-3 font-black">{{ project.title }}</h3>
+            <p class="mt-1 text-sm text-ink-soft">{{ project.description|default:"Private project writeup."|striptags|truncatewords:18 }}</p>
+            <a class="mt-3 inline-flex text-sm font-extrabold text-brand-blue" href="{% url 'project_edit' project.pk %}">Edit Project</a>
+          </article>
+        {% empty %}
+          <div class="empty-state">No Project Passport entries yet.</div>
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+
+  <div class="mt-8 grid grid-cols-5 gap-4 max-lg:grid-cols-2 max-sm:grid-cols-1">
+    <a class="card p-5 font-black" href="{% url 'core_run' %}">Core Run</a>
+    <a class="card p-5 font-black" href="{% url 'a_la_carte' %}">A la Carte</a>
+    <a class="card p-5 font-black" href="{% url 'parts_index' %}">Parts Library</a>
+    <a class="card p-5 font-black" href="{% url 'debug_index' %}">Debugging Help</a>
+    <a class="card p-5 font-black" href="{% url 'safety_center' %}">Safety</a>
+  </div>
+</section>
+{% endblock %}
