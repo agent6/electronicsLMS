@@ -1,0 +1,46 @@
+{% extends "base/base.html" %}
+{% block title %}Create account - ObsoleteHQ{% endblock %}
+{% block content %}
+<section class="container-page grid min-h-[calc(100vh-180px)] place-items-center py-12">
+  <form class="form-panel w-full max-w-lg" method="post">
+    {% csrf_token %}
+    <div>
+      <h1 class="text-3xl font-black tracking-[-0.03em]">Create your account</h1>
+      <p class="mt-2 text-ink-soft">Use a username, private email, and display name. Do not use your full name.</p>
+    </div>
+    {% if form.non_field_errors %}
+      <div class="rounded-lg bg-red-50 p-4 font-bold text-brand-red">{{ form.non_field_errors }}</div>
+    {% endif %}
+    <label class="field-grid">
+      <span class="font-extrabold">Username</span>
+      {{ form.username }}
+      {% if form.username.errors %}<span class="text-sm font-bold text-brand-red">{{ form.username.errors }}</span>{% endif %}
+    </label>
+    <label class="field-grid">
+      <span class="font-extrabold">Private email</span>
+      {{ form.email }}
+      {% if form.email.errors %}<span class="text-sm font-bold text-brand-red">{{ form.email.errors }}</span>{% endif %}
+    </label>
+    <label class="field-grid">
+      <span class="font-extrabold">Display name</span>
+      {{ form.display_name }}
+      {% if form.display_name.errors %}<span class="text-sm font-bold text-brand-red">{{ form.display_name.errors }}</span>{% endif %}
+    </label>
+    <label class="field-grid">
+      <span class="font-extrabold">Password</span>
+      {{ form.password }}
+      {% if form.password.errors %}<span class="text-sm font-bold text-brand-red">{{ form.password.errors }}</span>{% endif %}
+    </label>
+    <label class="field-grid">
+      <span class="font-extrabold">Confirm password</span>
+      {{ form.confirm_password }}
+      {% if form.confirm_password.errors %}<span class="text-sm font-bold text-brand-red">{{ form.confirm_password.errors }}</span>{% endif %}
+    </label>
+    <div class="rounded-lg bg-[#f7fbff] p-4 text-sm text-ink-soft">
+      Email stays private. Public pages use display names only.
+    </div>
+    <button class="btn btn-primary" type="submit">Create account</button>
+    <p class="text-sm text-ink-soft">Already have an account? <a class="font-extrabold text-brand-blue" href="{% url 'login' %}">Log in</a>.</p>
+  </form>
+</section>
+{% endblock %}

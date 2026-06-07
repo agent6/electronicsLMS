@@ -33,7 +33,7 @@
             <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="btn btn-primary" type="submit">Log out</button></form>
           {% else %}
             <a class="btn max-sm:hidden" href="{% url 'login' %}">Log in</a>
-            <a class="btn btn-primary" href="{% url 'login' %}">Start learning</a>
+            <a class="btn btn-primary" href="{% url 'signup' %}">Start learning</a>
           {% endif %}
         </div>
       </div>
@@ -46,6 +46,16 @@
         <a href="{% url 'build_log_list' %}">Dev Log</a>
       </nav>
     </header>
+    {% if user.is_authenticated and not user.profile.email_is_verified %}
+      <div class="container-page mt-4">
+        <form class="rounded-card flex flex-wrap items-center justify-between gap-3 border border-line bg-[#f7fbff] p-4 shadow-soft" method="post" action="{% url 'resend_verification_email' %}">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.get_full_path }}">
+          <p class="text-sm font-bold text-ink">Verify your private email before public publishing features become available.</p>
+          <button class="btn" type="submit">Send verification email</button>
+        </form>
+      </div>
+    {% endif %}
     {% if messages %}
       <div class="container-page mt-4 grid gap-2">
         {% for message in messages %}

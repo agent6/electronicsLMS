@@ -9,6 +9,10 @@
     <label class="field-grid"><span class="font-extrabold">Username</span>{{ form.username }}</label>
     <label class="field-grid"><span class="font-extrabold">Password</span>{{ form.password }}</label>
     <button class="btn btn-primary" type="submit">Log in</button>
+    <div class="flex flex-wrap gap-4 text-sm">
+      <a class="font-extrabold text-brand-blue" href="{% url 'signup' %}">Create account</a>
+      <a class="font-extrabold text-brand-blue" href="{% url 'password_reset' %}">Forgot password?</a>
+    </div>
   </form>
 </section>
 {% endblock %}

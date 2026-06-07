@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model, login
 from django.http import Http404
 from django.shortcuts import redirect, render
+from django.utils import timezone
 
 from accounts.models import Profile
 
@@ -24,6 +25,7 @@ def setup(request):
             profile, _ = Profile.objects.get_or_create(user=user)
             profile.display_name = form.cleaned_data["display_name"]
             profile.role = Profile.Role.ADMIN
+            profile.email_verified_at = timezone.now()
             profile.save()
             login(request, user)
             messages.success(request, "ObsoleteHQ setup is complete. You are logged in as admin.")

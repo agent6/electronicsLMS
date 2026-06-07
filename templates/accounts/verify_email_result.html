@@ -1,0 +1,17 @@
+{% extends "base/base.html" %}
+{% block title %}Email verification - ObsoleteHQ{% endblock %}
+{% block content %}
+<section class="container-page grid min-h-[calc(100vh-180px)] place-items-center py-12">
+  <div class="form-panel w-full max-w-md">
+    {% if verified %}
+      <h1 class="text-3xl font-black tracking-[-0.03em]">Email verified</h1>
+      <p class="text-ink-soft">Your account email is verified. You can keep building.</p>
+      <a class="btn btn-primary" href="{% url 'learn_dashboard' %}">Go to dashboard</a>
+    {% else %}
+      <h1 class="text-3xl font-black tracking-[-0.03em]">Verification link did not work</h1>
+      <p class="text-ink-soft">The link may be expired or already used. Log in and send a fresh verification email.</p>
+      <a class="btn btn-primary" href="{% url 'login' %}">Log in</a>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

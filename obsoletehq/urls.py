@@ -3,6 +3,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path
+from django.urls import reverse_lazy
 
 from accounts import views as account_views
 from core import views as core_views
@@ -23,6 +24,37 @@ urlpatterns = [
         name="login",
     ),
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
+    path("signup/", account_views.signup, name="signup"),
+    path("verify-email/<uidb64>/<token>/", account_views.verify_email, name="verify_email"),
+    path("verify-email/resend/", account_views.resend_verification_email, name="resend_verification_email"),
+    path(
+        "password-reset/",
+        auth_views.PasswordResetView.as_view(
+            template_name="registration/password_reset_form.html",
+            email_template_name="registration/password_reset_email.html",
+            subject_template_name="registration/password_reset_subject.txt",
+            success_url=reverse_lazy("password_reset_done"),
+        ),
+        name="password_reset",
+    ),
+    path(
+        "password-reset/done/",
+        auth_views.PasswordResetDoneView.as_view(template_name="registration/password_reset_done.html"),
+        name="password_reset_done",
+    ),
+    path(
+        "password-reset/<uidb64>/<token>/",
+        auth_views.PasswordResetConfirmView.as_view(
+            template_name="registration/password_reset_confirm.html",
+            success_url=reverse_lazy("password_reset_complete"),
+        ),
+        name="password_reset_confirm",
+    ),
+    path(
+        "password-reset/complete/",
+        auth_views.PasswordResetCompleteView.as_view(template_name="registration/password_reset_complete.html"),
+        name="password_reset_complete",
+    ),
     path("profile/", account_views.profile, name="profile"),
     path("learn/", learning_views.dashboard, name="learn_dashboard"),
     path("learn/core-run/", learning_views.core_run, name="core_run"),

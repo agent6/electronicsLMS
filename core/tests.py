@@ -73,7 +73,8 @@ class ObsoleteHQSmokeTests(TestCase):
             },
         )
         self.assertRedirects(response, reverse("learn_dashboard"))
-        self.assertTrue(get_user_model().objects.filter(username="admin", is_superuser=True).exists())
+        user = get_user_model().objects.get(username="admin", is_superuser=True)
+        self.assertIsNotNone(user.profile.email_verified_at)
         locked = self.client.get(reverse("setup"))
         self.assertEqual(locked.status_code, 404)
 
@@ -258,10 +259,19 @@ class ObsoleteHQSmokeTests(TestCase):
             "servo": (3, 2),
             "dc-water-pump": (1, 2),
             "relay": (2, 4),
+            "button": (3, 3),
+            "micro-switch": (3, 3),
+            "slide-switch": (3, 3),
+            "potentiometer": (2, 3),
+            "infrared-receiver": (2, 4),
+            "joystick-module": (2, 4),
+            "4x4-keypad": (1, 4),
+            "mpr121-module": (1, 4),
+            "mfrc522-rfid-module": (1, 4),
         }
         for slug, (asset_count, resource_count) in expected.items():
             component = Component.objects.get(slug=slug)
-            self.assertIn(component.category, {"Basic", "Chip", "Display", "Sound", "Actuator"})
+            self.assertIn(component.category, {"Basic", "Chip", "Display", "Sound", "Actuator", "Controller"})
             self.assertEqual(component.assets.count(), asset_count)
             self.assertEqual(component.resources.count(), resource_count)
             self.assertTrue(component.source_url)
@@ -337,6 +347,42 @@ class ObsoleteHQSmokeTests(TestCase):
         self.assertContains(response, "SRS-05VDC-SL")
         self.assertContains(response, "Songle SRS relay datasheet PDF")
         self.assertContains(response, "low-voltage DC")
+
+        response = self.client.get(reverse("part_detail", kwargs={"slug": "button"}))
+        self.assertContains(response, "pins 1 and 2 are connected together")
+        self.assertContains(response, "button_symbol.png")
+
+        response = self.client.get(reverse("part_detail", kwargs={"slug": "micro-switch"}))
+        self.assertContains(response, "normally open")
+        self.assertContains(response, "micro_switch2.png")
+
+        response = self.client.get(reverse("part_detail", kwargs={"slug": "slide-switch"}))
+        self.assertContains(response, "middle pin as the fixed connection point")
+        self.assertContains(response, "slide_principle.png")
+
+        response = self.client.get(reverse("part_detail", kwargs={"slug": "potentiometer"}))
+        self.assertContains(response, "machine.ADC")
+        self.assertContains(response, "above 3.3V")
+
+        response = self.client.get(reverse("part_detail", kwargs={"slug": "infrared-receiver"}))
+        self.assertContains(response, "HX1838")
+        self.assertContains(response, "micropython_ir")
+
+        response = self.client.get(reverse("part_detail", kwargs={"slug": "joystick-module"}))
+        self.assertContains(response, "Two analog axes")
+        self.assertContains(response, "dead zone")
+
+        response = self.client.get(reverse("part_detail", kwargs={"slug": "4x4-keypad"}))
+        self.assertContains(response, "row-column matrix")
+        self.assertContains(response, "Keyboard matrix circuit")
+
+        response = self.client.get(reverse("part_detail", kwargs={"slug": "mpr121-module"}))
+        self.assertContains(response, "0x5A")
+        self.assertContains(response, "micropython-mpr121")
+
+        response = self.client.get(reverse("part_detail", kwargs={"slug": "mfrc522-rfid-module"}))
+        self.assertContains(response, "13.56 MHz")
+        self.assertContains(response, "micropython-mfrc522")
 
     def test_completion_creates_progress_and_xp(self):
         user = self.make_user()

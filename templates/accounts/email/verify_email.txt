@@ -1,0 +1,9 @@
+Hi {{ profile.display_name }},
+
+Verify this private email for your ObsoleteHQ account:
+
+{{ verification_url }}
+
+You can keep using private learning features before verifying. Verification is needed before public publishing features are available.
+
+If you did not create this account, you can ignore this email.
