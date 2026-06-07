@@ -1,5 +1,6 @@
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import get_user_model
+from django.db import DatabaseError
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 
@@ -17,7 +18,11 @@ def home(request):
 
 
 def health(request):
-    return JsonResponse({"ok": True, "users": get_user_model().objects.count()})
+    try:
+        users = get_user_model().objects.count()
+    except DatabaseError as exc:
+        return JsonResponse({"ok": False, "database": "unavailable", "error": exc.__class__.__name__}, status=503)
+    return JsonResponse({"ok": True, "database": "ok", "users": users})
 
 
 @staff_member_required

@@ -75,6 +75,13 @@ class ObsoleteHQSmokeTests(TestCase):
             response = self.client.get(reverse(name))
             self.assertLess(response.status_code, 500, name)
 
+    def test_health_reports_database_ok(self):
+        self.make_user()
+        response = self.client.get(reverse("health"))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["ok"], True)
+        self.assertEqual(response.json()["database"], "ok")
+
     def test_authenticated_home_redirects_to_dashboard(self):
         user = self.make_user()
         self.client.force_login(user)
@@ -238,10 +245,15 @@ class ObsoleteHQSmokeTests(TestCase):
             "led-dot-matrix": (3, 2),
             "i2c-lcd1602": (3, 3),
             "ws2812-neopixel-leds": (1, 3),
+            "buzzer": (2, 4),
+            "dc-motor": (2, 4),
+            "servo": (3, 2),
+            "dc-water-pump": (1, 2),
+            "relay": (2, 4),
         }
         for slug, (asset_count, resource_count) in expected.items():
             component = Component.objects.get(slug=slug)
-            self.assertIn(component.category, {"Basic", "Chip", "Display"})
+            self.assertIn(component.category, {"Basic", "Chip", "Display", "Sound", "Actuator"})
             self.assertEqual(component.assets.count(), asset_count)
             self.assertEqual(component.resources.count(), resource_count)
             self.assertTrue(component.source_url)
@@ -286,6 +298,27 @@ class ObsoleteHQSmokeTests(TestCase):
         response = self.client.get(reverse("part_detail", kwargs={"slug": "ws2812-neopixel-leds"}))
         self.assertContains(response, "WS2812B")
         self.assertContains(response, "MicroPython: neopixel")
+
+        response = self.client.get(reverse("part_detail", kwargs={"slug": "buzzer"}))
+        self.assertContains(response, "active and passive buzzers")
+        self.assertContains(response, "MicroPython: machine.PWM")
+
+        response = self.client.get(reverse("part_detail", kwargs={"slug": "dc-motor"}))
+        self.assertContains(response, "800mA stall current")
+        self.assertContains(response, "MagLab: DC Motor")
+
+        response = self.client.get(reverse("part_detail", kwargs={"slug": "servo"}))
+        self.assertContains(response, "pulse every 20 ms")
+        self.assertContains(response, "servo_duty.png")
+
+        response = self.client.get(reverse("part_detail", kwargs={"slug": "dc-water-pump"}))
+        self.assertContains(response, "120-180mA operating current")
+        self.assertContains(response, "submerged")
+
+        response = self.client.get(reverse("part_detail", kwargs={"slug": "relay"}))
+        self.assertContains(response, "SRS-05VDC-SL")
+        self.assertContains(response, "Songle SRS relay datasheet PDF")
+        self.assertContains(response, "low-voltage DC")
 
     def test_completion_creates_progress_and_xp(self):
         user = self.make_user()

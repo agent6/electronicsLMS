@@ -1008,6 +1008,172 @@ class Command(BaseCommand):
             ],
         )
 
+        self.seed_component(
+            slug="buzzer",
+            defaults={
+                "name": "Buzzer",
+                "category": "Sound",
+                "description": "A buzzer is an audio signaling component that turns electrical control into sound.",
+                "how_it_is_used": "Students use buzzers for alarms, timers, button feedback, simple music, and sensor warnings. Active buzzers make a tone when powered; passive buzzers need a changing square wave.",
+                "signal_type": Component.SignalType.PWM,
+                "power_requirement": "DC-powered buzzer. Passive buzzers need a square wave, and SunFounder notes a typical passive-buzzer drive frequency range of 2 kHz to 5 kHz.",
+                "pins": "Positive and negative pins. SunFounder notes the pin marked '+' is the anode, and the longer pin is also the anode.",
+                "pinout_notes": "Active buzzer: connect with correct polarity and switch it on/off. Passive buzzer: use PWM or a square wave to create a tone.",
+                "datasheet_notes": "SunFounder explains active/passive buzzer behavior but does not identify one exact model number. Match the part marking before using a specific datasheet.",
+                "libraries": "Use machine.Pin for active buzzer on/off. Use machine.PWM for passive buzzer tones.",
+                "voltage_notes": "Do not assume a buzzer can be driven directly from a GPIO at any current. Use the lesson circuit and current planning.",
+                "safety_notes": "Buzzers can be loud up close. Start with short tests and keep it away from ears.",
+                "common_mistakes": "Mixing up active and passive buzzers, reversing polarity, using DC on a passive buzzer and expecting sound, and using a PWM frequency outside the useful range.",
+                "source_name": "SunFounder Buzzer component page",
+                "source_url": f"{BASIC_SOURCE}component_buzzer.html",
+                "attribution": sf_component_source,
+            },
+            kits=[pico],
+            assets=[
+                {"title": "Active and passive buzzers", "static_asset_path": "img/parts/sound/buzzer.png", "alt_text": "Active and passive buzzers", "caption": "SunFounder distinguishes active and passive buzzers by construction.", "source_name": sf_component_source, "source_url": "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/_images/buzzer.png"},
+                {"title": "Buzzer symbol", "static_asset_path": "img/parts/sound/buzzer_symbol.png", "alt_text": "Buzzer schematic symbol", "caption": "The buzzer symbol shows positive and negative polarity.", "source_name": sf_component_source, "source_url": "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/_images/buzzer_symbol.png"},
+            ],
+            resources=[
+                {"title": "SunFounder: Buzzer", "url": f"{BASIC_SOURCE}component_buzzer.html", "resource_type": RT.SUNFOUNDER, "notes": "Source page for active/passive buzzer differences, polarity, and images."},
+                {"title": "Wikipedia: Buzzer", "url": "https://en.wikipedia.org/wiki/Buzzer", "resource_type": RT.GUIDE, "notes": "General background reference for buzzer types and applications."},
+                {"title": "MicroPython: machine.Pin", "url": "https://docs.micropython.org/en/latest/library/machine.Pin.html", "resource_type": RT.LIBRARY, "notes": "Use for active buzzer on/off control."},
+                {"title": "MicroPython: machine.PWM", "url": "https://docs.micropython.org/en/latest/library/machine.PWM.html", "resource_type": RT.LIBRARY, "notes": "Use for passive buzzer tones."},
+            ],
+        )
+
+        self.seed_component(
+            slug="dc-motor",
+            defaults={
+                "name": "DC Motor",
+                "category": "Actuator",
+                "description": "A DC motor converts electrical energy into continuous rotation.",
+                "how_it_is_used": "Students use it for fans, wheels, pumps, and motion projects. The Pico controls a driver chip or transistor; the motor current does not come directly from GPIO.",
+                "signal_type": Component.SignalType.PWM,
+                "power_requirement": "SunFounder identifies this as a 3V DC motor with 1-6V operation range, 70mA free-run current at 3V, 13000RPM free-run speed at 3V, 800mA stall current at 3V, and 2mm shaft diameter.",
+                "pins": "Two motor terminals. Reversing polarity reverses rotation direction when the driver circuit supports it.",
+                "pinout_notes": "A bare DC motor has no signal pin. Use a motor driver such as TA6586 for direction control and safe current handling.",
+                "datasheet_notes": "SunFounder gives the key kit motor specs but not a manufacturer model number. Stall current is the number students should respect most when choosing a driver or power source.",
+                "discrete_parts": "Permanent magnet/stator, rotor/armature, brushes, commutator, shaft, and winding.",
+                "libraries": "Use machine.Pin for direction inputs through a driver and machine.PWM if speed control is taught.",
+                "voltage_notes": "Motor startup and stall current can be much higher than free-run current. Do not power a motor from a Pico GPIO pin.",
+                "safety_notes": "Keep fingers, hair, wires, and loose parts away from a spinning shaft or fan. Stop if the motor, driver, or power wires heat up.",
+                "common_mistakes": "Driving the motor directly from GPIO, ignoring stall current, forgetting flyback/driver protection, missing common ground, and using weak USB power for a motor load.",
+                "source_name": "SunFounder DC Motor component page",
+                "source_url": f"{BASIC_SOURCE}component_dc_motor.html",
+                "attribution": sf_component_source,
+            },
+            kits=[pico],
+            assets=[
+                {"title": "DC motor", "static_asset_path": "img/parts/actuators/motor.png", "alt_text": "Small DC motor", "caption": "A continuous-rotation actuator for fan, wheel, and motion projects.", "source_name": sf_component_source, "source_url": "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/_images/motor.png"},
+                {"title": "Motor principle diagram", "static_asset_path": "img/parts/actuators/motor_sche.png", "alt_text": "DC motor operating principle diagram", "caption": "SunFounder diagram showing brushes, commutator, and armature behavior.", "source_name": sf_component_source, "source_url": "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/_images/motor_sche.png"},
+            ],
+            resources=[
+                {"title": "SunFounder: DC Motor", "url": f"{BASIC_SOURCE}component_dc_motor.html", "resource_type": RT.SUNFOUNDER, "notes": "Source page for motor specs, operating explanation, and images."},
+                {"title": "MagLab: DC Motor", "url": "https://nationalmaglab.org/education/magnet-academy/watch-play/interactive/dc-motor", "resource_type": RT.GUIDE, "notes": "Validated interactive/background guide for how DC motors work."},
+                {"title": "Wikipedia: Fleming's left-hand rule for motors", "url": "https://en.wikipedia.org/wiki/Fleming%27s_left-hand_rule_for_motors", "resource_type": RT.GUIDE, "notes": "Reference for the motor-force direction rule SunFounder links."},
+                {"title": "MicroPython: machine.PWM", "url": "https://docs.micropython.org/en/latest/library/machine.PWM.html", "resource_type": RT.LIBRARY, "notes": "Use for speed control when driving a motor through suitable hardware."},
+            ],
+        )
+
+        self.seed_component(
+            slug="servo",
+            defaults={
+                "name": "Servo",
+                "category": "Actuator",
+                "description": "A hobby servo is a closed-loop positioning actuator: a small motor, gears, potentiometer, and controller board work together to move and hold a shaft angle.",
+                "how_it_is_used": "Students use it for arms, pointers, locks, gates, steering, and any project that needs a controlled angle rather than continuous spin.",
+                "signal_type": Component.SignalType.PWM,
+                "power_requirement": "Use appropriate servo power. Do not assume the Pico GPIO can power the servo motor.",
+                "pins": "Typical hobby servo wiring is power, ground, and signal. Verify the wire colors on the actual servo before connecting.",
+                "pinout_notes": "SunFounder explains that the signal is pulse-width controlled, with a pulse every 20 ms. Around 1.5 ms is neutral/90 degrees, with typical useful pulses roughly 0.5 ms to 2.5 ms depending on the servo.",
+                "datasheet_notes": "SunFounder does not identify one exact servo model number. Match the servo label before using a model-specific datasheet. Key specs are voltage range, stall current, torque, speed, pulse range, and travel angle.",
+                "discrete_parts": "Case, output shaft, gear system, potentiometer, DC motor, and embedded control board.",
+                "libraries": "Use machine.PWM to generate servo control pulses. Most lessons wrap this in a small helper function or class.",
+                "voltage_notes": "Servo signal is low-current, but servo power is not. Brownouts happen when a servo pulls more current than the power source can provide.",
+                "safety_notes": "Do not force the horn past its mechanical limits. Keep fingers clear of linkages and powered mechanisms.",
+                "common_mistakes": "Powering the servo from a weak 3.3V pin, no common ground, wrong pulse range causing chatter, reversed power wires, and physically blocking the servo so it stalls.",
+                "source_name": "SunFounder Servo component page",
+                "source_url": f"{BASIC_SOURCE}component_servo.html",
+                "attribution": sf_component_source,
+            },
+            kits=[pico],
+            assets=[
+                {"title": "Servo", "static_asset_path": "img/parts/actuators/servo.png", "alt_text": "Small hobby servo motor", "caption": "A closed-loop actuator for controlled shaft angle.", "source_name": sf_component_source, "source_url": "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/_images/servo.png"},
+                {"title": "Servo internal parts", "static_asset_path": "img/parts/actuators/servo_internal.png", "alt_text": "Servo internal structure", "caption": "SunFounder diagram of motor, gears, potentiometer, and control board.", "source_name": sf_component_source, "source_url": "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/_images/servo_internal.png"},
+                {"title": "Servo pulse width", "static_asset_path": "img/parts/actuators/servo_duty.png", "alt_text": "Servo PWM pulse width diagram", "caption": "Pulse width controls target angle.", "source_name": sf_component_source, "source_url": "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/_images/servo_duty.png"},
+            ],
+            resources=[
+                {"title": "SunFounder: Servo", "url": f"{BASIC_SOURCE}component_servo.html", "resource_type": RT.SUNFOUNDER, "notes": "Source page for servo internals, PWM timing, and images."},
+                {"title": "MicroPython: machine.PWM", "url": "https://docs.micropython.org/en/latest/library/machine.PWM.html", "resource_type": RT.LIBRARY, "notes": "Use to generate the servo control pulse."},
+            ],
+        )
+
+        self.seed_component(
+            slug="dc-water-pump",
+            defaults={
+                "name": "DC Water Pump",
+                "category": "Actuator",
+                "description": "A small submersible DC pump that moves water from its inlet through an outlet tube.",
+                "how_it_is_used": "Students use it for fountains, plant watering, and water-transfer projects. The Pico controls a driver circuit; the pump itself behaves like a DC motor load.",
+                "signal_type": Component.SignalType.DIGITAL,
+                "power_requirement": "SunFounder lists DC 3-4.5V, 120-180mA operating current, 0.36-0.91W power, 0.35-0.55m max water head, and 80-100 L/H max flow rate.",
+                "pins": "Two power leads. SunFounder notes reversing polarity does not turn it into an intake pump.",
+                "pinout_notes": "Treat it as a motor load. Use a suitable driver and power path; do not connect it directly to Pico GPIO.",
+                "datasheet_notes": "SunFounder provides operating specs but no exact manufacturer model number. Match the pump label before using a model-specific datasheet.",
+                "discrete_parts": "DC magnetic drive pump in an engineering-plastic submersible body with outlet pipe and 25cm male wire leads.",
+                "libraries": "No special library is needed. Use machine.Pin to switch the driver on/off; PWM speed control is not assumed unless a lesson validates it.",
+                "voltage_notes": "Pump current is far above safe GPIO current. It also creates electrical noise like other motor loads.",
+                "safety_notes": "SunFounder warns it should remain submerged during operation; it can overheat if run dry. Keep water away from the Pico and computer.",
+                "common_mistakes": "Running it dry, powering it from GPIO, ignoring startup current, expecting reversed polarity to reverse water flow, and letting water reach electronics.",
+                "source_name": "SunFounder DC Water Pump component page",
+                "source_url": f"{BASIC_SOURCE}component_pump.html",
+                "attribution": sf_component_source,
+            },
+            kits=[pico],
+            assets=[
+                {"title": "DC water pump", "static_asset_path": "img/parts/actuators/pump.png", "alt_text": "Small submersible DC water pump", "caption": "A motor-style actuator for moving water in low-voltage projects.", "source_name": sf_component_source, "source_url": "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/_images/pump.png"},
+            ],
+            resources=[
+                {"title": "SunFounder: DC Water Pump", "url": f"{BASIC_SOURCE}component_pump.html", "resource_type": RT.SUNFOUNDER, "notes": "Source page for pump specs, submersible warning, and image."},
+                {"title": "MicroPython: machine.Pin", "url": "https://docs.micropython.org/en/latest/library/machine.Pin.html", "resource_type": RT.LIBRARY, "notes": "Use to switch a suitable pump driver circuit."},
+            ],
+        )
+
+        self.seed_component(
+            slug="relay",
+            defaults={
+                "name": "Relay",
+                "category": "Actuator",
+                "description": "A relay is an electrically controlled switch that uses a coil and moving contacts to open or close another circuit.",
+                "how_it_is_used": "Students use relays to switch a separate low-voltage load while the Pico controls only the relay-driver side.",
+                "signal_type": Component.SignalType.DIGITAL,
+                "power_requirement": "The relay image shows a Songle SRS-05VDC-SL marking with 5V coil family and printed contact ratings of 3A 250VAC / 30VDC. ObsoleteHQ beginner projects keep relay loads low-voltage DC only.",
+                "pins": "Coil pins plus contact pins for normally open, normally closed, and common. Confirm against the relay package/datasheet before wiring.",
+                "pinout_notes": "SunFounder explains normally open contacts connect when activated, normally closed contacts connect when inactive, and the coil moves the armature.",
+                "datasheet_notes": "The SunFounder image visibly marks Songle SRS-05VDC-SL. Use the SRS-series datasheet and the exact package marking to confirm coil/contact pinout and ratings.",
+                "main_component": "Songle SRS-05VDC-SL relay marking visible in the SunFounder source image.",
+                "discrete_parts": "Electromagnet coil, iron core, armature, spring, normally open contact, normally closed contact, common contact, and molded frame.",
+                "libraries": "No special library is needed. Use machine.Pin to control the relay-driver circuit.",
+                "voltage_notes": "A relay coil is not a GPIO load. Use a driver circuit and flyback protection as required. Do not use mains-voltage loads in beginner ObsoleteHQ projects.",
+                "safety_notes": "Keep relay projects low-voltage DC. Never switch wall power in student projects. Power off before moving contact wiring.",
+                "common_mistakes": "Confusing NO and NC, driving the coil directly from GPIO, forgetting flyback protection, using contact ratings as permission to switch mains, and not sharing ground on the control side.",
+                "source_name": "SunFounder Relay component page",
+                "source_url": f"{BASIC_SOURCE}component_relay.html",
+                "attribution": sf_component_source,
+            },
+            kits=[pico],
+            assets=[
+                {"title": "Relay", "static_asset_path": "img/parts/actuators/relay.png", "alt_text": "Songle SRS-05VDC-SL relay", "caption": "The case marking identifies a Songle SRS-05VDC-SL relay family part.", "source_name": sf_component_source, "source_url": "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/_images/relay12.png"},
+                {"title": "Relay schematic", "static_asset_path": "img/parts/actuators/relay_schematic.jpeg", "alt_text": "Relay working schematic", "caption": "SunFounder diagram showing coil, armature, spring, and contacts.", "source_name": sf_component_source, "source_url": "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/_images/relay142.jpeg"},
+            ],
+            resources=[
+                {"title": "SunFounder: Relay", "url": f"{BASIC_SOURCE}component_relay.html", "resource_type": RT.SUNFOUNDER, "notes": "Source page for relay working principle, contact terminology, and images."},
+                {"title": "Songle SRS relay datasheet PDF", "url": "https://static.cytron.io/download/usr_attachment/Songle%20SRS.pdf", "resource_type": RT.DATASHEET, "notes": "Validated SRS-series relay datasheet link matching the SRS-05VDC-SL family marking visible in the SunFounder image."},
+                {"title": "Wikipedia: Relay", "url": "https://en.wikipedia.org/wiki/Relay", "resource_type": RT.GUIDE, "notes": "General reference for relay operation and terminology."},
+                {"title": "MicroPython: machine.Pin", "url": "https://docs.micropython.org/en/latest/library/machine.Pin.html", "resource_type": RT.LIBRARY, "notes": "Use to control the relay-driver input."},
+            ],
+        )
+
         safety_items = [
             ("Pico GPIO is 3.3V", "Do not feed 5V signals into Raspberry Pi Pico 2 W GPIO pins."),
             ("Motors need drivers", "Do not power motors, pumps, or relays directly from GPIO pins."),

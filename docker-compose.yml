@@ -21,10 +21,12 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:?Set DJANGO_SECRET_KEY in the Portainer stack environment}
       DJANGO_DEBUG: ${DJANGO_DEBUG:-false}
-      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:-obsoletehq.com,localhost,127.0.0.1}
-      DJANGO_CSRF_TRUSTED_ORIGINS: ${DJANGO_CSRF_TRUSTED_ORIGINS:-https://obsoletehq.com}
+      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:-obsoletehq.com,www.obsoletehq.com,localhost,127.0.0.1}
+      DJANGO_CSRF_TRUSTED_ORIGINS: ${DJANGO_CSRF_TRUSTED_ORIGINS:-https://obsoletehq.com,https://www.obsoletehq.com}
+      DJANGO_RUN_MIGRATIONS: ${DJANGO_RUN_MIGRATIONS:-true}
+      DJANGO_SEED_ON_STARTUP: ${DJANGO_SEED_ON_STARTUP:-true}
       DATABASE_URL: postgres://${POSTGRES_USER:-obsoletehq}:${POSTGRES_PASSWORD:-change-me}@postgres:5432/${POSTGRES_DB:-obsoletehq}
     ports:
       - "${WEB_PORT:-8000}:8000"
@@ -35,6 +37,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+      start_period: 90s
 
 volumes:
   postgres_data:

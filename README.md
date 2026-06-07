@@ -47,18 +47,13 @@ Open `http://localhost:4173/`. If no user exists, the app redirects to `/setup/`
 
 ## Docker Compose / Portainer
 
-1. Copy `.env.example` to `.env` and set strong secrets.
+1. Copy `.env.example` to `.env` and set strong secrets. `DJANGO_SECRET_KEY` is required when `DJANGO_DEBUG=false`; the stack will fail fast if it is missing.
 2. In Portainer, create a stack from `docker-compose.yml`.
 3. Deploy the stack.
-4. Run migrations in the web container:
+4. Open the public URL routed through your external Cloudflare Tunnel.
+5. Complete `/setup/`.
 
-```bash
-python manage.py migrate
-python manage.py seed_obsoletehq
-```
-
-5. Open the public URL routed through your external Cloudflare Tunnel.
-6. Complete `/setup/`.
+The web container runs `python manage.py migrate --noinput` and `python manage.py seed_obsoletehq` on startup by default. To disable either behavior, set `DJANGO_RUN_MIGRATIONS=false` or `DJANGO_SEED_ON_STARTUP=false` in the stack environment.
 
 Cloudflare Tunnel and DNS are intentionally outside this project.
 
