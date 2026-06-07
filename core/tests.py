@@ -7,7 +7,15 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 
-from learning.models import Component, CoreRunWeek, LearningExperience, LearningExperienceSection, Track
+from learning.models import (
+    Component,
+    ComponentAsset,
+    ComponentResource,
+    CoreRunWeek,
+    LearningExperience,
+    LearningExperienceSection,
+    Track,
+)
 from progress.models import LearningProgress, MomentumEvent, XPEvent
 from projects.models import BuildLog, Project
 
@@ -257,6 +265,16 @@ class ObsoleteHQSmokeTests(TestCase):
             self.assertEqual(component.assets.count(), asset_count)
             self.assertEqual(component.resources.count(), resource_count)
             self.assertTrue(component.source_url)
+
+        for model in (Component, ComponentAsset, ComponentResource):
+            for obj in model.objects.all():
+                label = getattr(obj, "slug", f"{model.__name__}:{obj.pk}")
+                for field in obj._meta.fields:
+                    max_length = getattr(field, "max_length", None)
+                    if not max_length:
+                        continue
+                    value = getattr(obj, field.name) or ""
+                    self.assertLessEqual(len(str(value)), max_length, f"{label}.{field.name}")
 
         response = self.client.get(reverse("part_detail", kwargs={"slug": "li-po-charger-module"}))
         self.assertContains(response, "LTC4054")
