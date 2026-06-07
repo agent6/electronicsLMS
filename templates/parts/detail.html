@@ -16,8 +16,19 @@
           <h2 class="text-xl font-black">Part images</h2>
           <div class="mt-4 grid grid-cols-2 gap-4 max-md:grid-cols-1">
             {% for asset in component.assets.all %}
+              {% static asset.static_asset_path as asset_url %}
               <figure class="rounded-card border border-line bg-[#f7fbff] p-4">
-                <img class="h-64 w-full object-contain" src="{% static asset.static_asset_path %}" alt="{{ asset.alt_text }}" loading="lazy">
+                <button
+                  class="part-image-trigger"
+                  type="button"
+                  data-lightbox-src="{{ asset_url }}"
+                  data-lightbox-alt="{{ asset.alt_text }}"
+                  data-lightbox-title="{{ asset.title }}"
+                  data-lightbox-caption="{{ asset.caption|default:'' }}"
+                  aria-label="Open full image: {{ asset.title }}"
+                >
+                  <img class="h-64 w-full object-contain" src="{{ asset_url }}" alt="{{ asset.alt_text }}" loading="lazy">
+                </button>
                 <figcaption class="mt-3 text-sm text-ink-soft">
                   <strong class="text-ink">{{ asset.title }}.</strong>
                   {% if asset.caption %} {{ asset.caption }}{% endif %}
@@ -80,4 +91,15 @@
     </aside>
   </div>
 </section>
+<div class="part-lightbox" data-part-lightbox hidden aria-hidden="true">
+  <button class="part-lightbox__backdrop" type="button" data-lightbox-close aria-label="Close full image"></button>
+  <section class="part-lightbox__dialog" role="dialog" aria-modal="true" aria-labelledby="part-lightbox-title" aria-describedby="part-lightbox-caption">
+    <button class="part-lightbox__close" type="button" data-lightbox-close>Close</button>
+    <img class="part-lightbox__image" data-lightbox-image alt="">
+    <div class="part-lightbox__text">
+      <h2 id="part-lightbox-title" data-lightbox-title></h2>
+      <p id="part-lightbox-caption" data-lightbox-caption></p>
+    </div>
+  </section>
+</div>
 {% endblock %}

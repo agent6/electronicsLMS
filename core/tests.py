@@ -268,10 +268,19 @@ class ObsoleteHQSmokeTests(TestCase):
             "4x4-keypad": (1, 4),
             "mpr121-module": (1, 4),
             "mfrc522-rfid-module": (1, 4),
+            "photoresistor": (2, 4),
+            "thermistor": (2, 3),
+            "tilt-switch": (2, 3),
+            "reed-switch": (2, 3),
+            "pir-motion-sensor-module": (3, 4),
+            "water-level-sensor-module": (1, 3),
+            "ultrasonic-module": (2, 4),
+            "dht11-humiture-sensor": (1, 3),
+            "mpu6050-module": (4, 4),
         }
         for slug, (asset_count, resource_count) in expected.items():
             component = Component.objects.get(slug=slug)
-            self.assertIn(component.category, {"Basic", "Chip", "Display", "Sound", "Actuator", "Controller"})
+            self.assertIn(component.category, {"Basic", "Chip", "Display", "Sound", "Actuator", "Controller", "Sensor"})
             self.assertEqual(component.assets.count(), asset_count)
             self.assertEqual(component.resources.count(), resource_count)
             self.assertTrue(component.source_url)
@@ -383,6 +392,46 @@ class ObsoleteHQSmokeTests(TestCase):
         response = self.client.get(reverse("part_detail", kwargs={"slug": "mfrc522-rfid-module"}))
         self.assertContains(response, "13.56 MHz")
         self.assertContains(response, "micropython-mfrc522")
+
+        response = self.client.get(reverse("part_detail", kwargs={"slug": "photoresistor"}))
+        self.assertContains(response, "resistance drops")
+        self.assertContains(response, "Adafruit: Photocells")
+
+        response = self.client.get(reverse("part_detail", kwargs={"slug": "thermistor"}))
+        self.assertContains(response, "10k ohm at 25C")
+        self.assertContains(response, "beta value 3950")
+
+        response = self.client.get(reverse("part_detail", kwargs={"slug": "tilt-switch"}))
+        self.assertContains(response, "SW-520D tilt switch datasheet PDF")
+        self.assertContains(response, "tilt_symbol.png")
+
+        response = self.client.get(reverse("part_detail", kwargs={"slug": "reed-switch"}))
+        self.assertContains(response, "glass tube")
+        self.assertContains(response, "reed_sche.png")
+
+        response = self.client.get(reverse("part_detail", kwargs={"slug": "pir-motion-sensor-module"}))
+        self.assertContains(response, "one-minute initialization")
+        self.assertContains(response, "Adafruit: PIR motion sensor guide")
+
+        response = self.client.get(reverse("part_detail", kwargs={"slug": "water-level-sensor-module"}))
+        self.assertContains(response, "must not be submerged")
+        self.assertContains(response, "reduce corrosion")
+
+        response = self.client.get(reverse("part_detail", kwargs={"slug": "ultrasonic-module"}))
+        self.assertContains(response, "TRIG trigger pulse input")
+        self.assertContains(response, "machine.time_pulse_us")
+        self.assertContains(response, "5V Echo pulse is not Pico-safe")
+
+        response = self.client.get(reverse("part_detail", kwargs={"slug": "dht11-humiture-sensor"}))
+        self.assertContains(response, "40 bits")
+        self.assertContains(response, "DHT11 datasheet PDF")
+
+        response = self.client.get(reverse("part_detail", kwargs={"slug": "mpu6050-module"}))
+        self.assertContains(response, "+/-2g")
+        self.assertContains(response, "MPU-6000/MPU-6050 datasheet PDF")
+        self.assertContains(response, "data-lightbox-src")
+        self.assertContains(response, "mpu6050.png")
+        self.assertContains(response, "data-part-lightbox")
 
     def test_completion_creates_progress_and_xp(self):
         user = self.make_user()

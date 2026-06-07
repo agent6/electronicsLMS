@@ -1,0 +1,112 @@
+.part-image-trigger {
+  display: block;
+  width: 100%;
+  border-radius: 0.75rem;
+  background: #f7fbff;
+  transition: box-shadow 150ms ease, transform 150ms ease;
+}
+
+.part-image-trigger:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 36px rgba(20, 54, 112, 0.12);
+}
+
+.part-image-trigger:focus-visible {
+  outline: 3px solid rgba(10, 104, 255, 0.45);
+  outline-offset: 3px;
+}
+
+.lightbox-open {
+  overflow: hidden;
+}
+
+.part-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: clamp(1rem, 3vw, 2.5rem);
+}
+
+.part-lightbox[hidden] {
+  display: none;
+}
+
+.part-lightbox__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(3, 14, 37, 0.76);
+  backdrop-filter: blur(10px);
+}
+
+.part-lightbox__dialog {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 1rem;
+  width: min(1180px, 96vw);
+  max-height: 92vh;
+  overflow: auto;
+  border: 1px solid rgba(216, 227, 245, 0.75);
+  border-radius: 1rem;
+  background: linear-gradient(180deg, #ffffff, #f7fbff);
+  padding: clamp(1rem, 2vw, 1.5rem);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.32);
+}
+
+.part-lightbox__close {
+  justify-self: end;
+  min-height: 2.75rem;
+  border: 1px solid #bfd0ec;
+  border-radius: 0.5rem;
+  background: #ffffff;
+  padding: 0 1rem;
+  color: #061331;
+  font-weight: 800;
+}
+
+.part-lightbox__close:focus-visible {
+  outline: 3px solid rgba(10, 104, 255, 0.45);
+  outline-offset: 3px;
+}
+
+.part-lightbox__image {
+  width: 100%;
+  max-height: min(72vh, 820px);
+  object-fit: contain;
+  border-radius: 0.75rem;
+  background: #ffffff;
+}
+
+.part-lightbox__text {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.part-lightbox__text h2 {
+  color: #061331;
+  font-size: 1.25rem;
+  font-weight: 900;
+  line-height: 1.25;
+}
+
+.part-lightbox__text p {
+  color: #31405e;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 640px) {
+  .part-lightbox {
+    padding: 0.75rem;
+  }
+
+  .part-lightbox__dialog {
+    max-height: 94vh;
+  }
+
+  .part-lightbox__image {
+    max-height: 68vh;
+  }
+}
