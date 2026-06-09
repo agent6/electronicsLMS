@@ -12,6 +12,7 @@ from learning.models import (
     ComponentAsset,
     ComponentResource,
     CoreRunWeek,
+    Kit,
     LearningExperience,
     LearningExperienceSection,
     Track,
@@ -309,39 +310,103 @@ class ObsoleteHQSmokeTests(TestCase):
             "74hc595": (2, 2),
             "ta6586-motor-driver-chip": (3, 3),
             "led": (2, 4),
-            "rgb-led": (4, 2),
+            "rgb-led": (4, 6),
             "led-bar-graph": (3, 2),
             "7-segment-display": (2, 2),
             "4-digit-7-segment-display": (2, 2),
             "led-dot-matrix": (3, 2),
             "i2c-lcd1602": (3, 3),
             "ws2812-neopixel-leds": (1, 3),
-            "buzzer": (2, 4),
+            "buzzer": (2, 8),
             "dc-motor": (2, 4),
             "servo": (3, 2),
             "dc-water-pump": (1, 2),
-            "relay": (2, 4),
-            "button": (3, 3),
+            "relay": (2, 6),
+            "button": (3, 5),
             "micro-switch": (3, 3),
             "slide-switch": (3, 3),
             "potentiometer": (2, 3),
-            "infrared-receiver": (2, 4),
-            "joystick-module": (2, 4),
+            "infrared-receiver": (2, 6),
+            "joystick-module": (2, 6),
             "4x4-keypad": (1, 4),
             "mpr121-module": (1, 4),
             "mfrc522-rfid-module": (1, 4),
-            "photoresistor": (2, 4),
-            "thermistor": (2, 3),
-            "tilt-switch": (2, 3),
-            "reed-switch": (2, 3),
+            "photoresistor": (2, 6),
+            "thermistor": (2, 5),
+            "tilt-switch": (2, 5),
+            "reed-switch": (2, 7),
             "pir-motion-sensor-module": (3, 4),
             "water-level-sensor-module": (1, 3),
             "ultrasonic-module": (2, 4),
-            "dht11-humiture-sensor": (1, 4),
+            "dht11-humiture-sensor": (1, 6),
             "mpu6050-module": (4, 4),
+            "laser-transmitter-module": (0, 2),
+            "infrared-transmitter-module": (0, 2),
+            "infrared-obstacle-avoidance-sensor": (0, 2),
+            "heartbeat-sensor-module": (0, 2),
+            "high-sensitivity-microphone-sensor": (0, 2),
+            "metal-touch-sensor": (0, 2),
+            "flame-sensor-module": (0, 2),
+            "line-tracking-sensor-module": (0, 2),
+            "linear-hall-sensor-module": (0, 2),
+            "rotary-encoder-module": (0, 2),
+            "magic-light-cup-module": (0, 2),
+            "digital-temperature-sensor-module": (0, 2),
+            "light-blocking-sensor-module": (0, 2),
+            "ds18b20-temperature-sensor-module": (0, 3),
+            "two-color-led-module": (0, 4),
+            "mercury-tilt-switch-module": (0, 2),
+            "hall-magnetic-sensor-module": (0, 2),
+            "vibration-switch-module": (0, 2),
+            "knock-sensor-module": (0, 2),
+            "analog-hall-magnetic-sensor-module": (0, 2),
+            "microphone-sound-sensor-module": (0, 2),
+        }
+        sensor_kit_coverage = {
+            "KY-001": "ds18b20-temperature-sensor-module",
+            "KY-002": "vibration-switch-module",
+            "KY-003": "hall-magnetic-sensor-module",
+            "KY-004": "button",
+            "KY-005": "infrared-transmitter-module",
+            "KY-006": "buzzer",
+            "KY-008": "laser-transmitter-module",
+            "KY-009": "rgb-led",
+            "KY-010": "light-blocking-sensor-module",
+            "KY-011": "two-color-led-module",
+            "KY-012": "buzzer",
+            "KY-013": "thermistor",
+            "KY-015": "dht11-humiture-sensor",
+            "KY-016": "rgb-led",
+            "KY-017": "mercury-tilt-switch-module",
+            "KY-018": "photoresistor",
+            "KY-019": "relay",
+            "KY-020": "tilt-switch",
+            "KY-021": "reed-switch",
+            "KY-022": "infrared-receiver",
+            "KY-023": "joystick-module",
+            "KY-024": "linear-hall-sensor-module",
+            "KY-025": "reed-switch",
+            "KY-026": "flame-sensor-module",
+            "KY-027": "magic-light-cup-module",
+            "KY-028": "digital-temperature-sensor-module",
+            "KY-029": "two-color-led-module",
+            "KY-031": "knock-sensor-module",
+            "KY-032": "infrared-obstacle-avoidance-sensor",
+            "KY-033": "line-tracking-sensor-module",
+            "KY-034": "rgb-led",
+            "KY-035": "analog-hall-magnetic-sensor-module",
+            "KY-036": "metal-touch-sensor",
+            "KY-037": "high-sensitivity-microphone-sensor",
+            "KY-038": "microphone-sound-sensor-module",
+            "KY-039": "heartbeat-sensor-module",
+            "KY-040": "rotary-encoder-module",
         }
         self.assertFalse(Component.objects.filter(slug="dht11-sensor").exists())
         self.assertEqual(Component.objects.filter(name__icontains="DHT11").count(), 1)
+        sensor_kit = Kit.objects.get(slug="37-in-1-sensor-module-starter-kit")
+        for ky_code, slug in sensor_kit_coverage.items():
+            component = Component.objects.get(slug=slug)
+            self.assertIn(sensor_kit, component.kits.all(), ky_code)
         for slug, (asset_count, resource_count) in expected.items():
             component = Component.objects.get(slug=slug)
             self.assertIn(component.category, {"Board", "Basic", "Chip", "Display", "Sound", "Actuator", "Controller", "Sensor"})
@@ -385,6 +450,7 @@ class ObsoleteHQSmokeTests(TestCase):
         self.assertContains(response, "common cathode")
         self.assertContains(response, "rgb_pin.jpg")
         self.assertContains(response, "MicroPython: machine.PWM")
+        self.assertContains(response, "KY-016")
 
         response = self.client.get(reverse("part_detail", kwargs={"slug": "led-dot-matrix"}))
         self.assertContains(response, "788BS")
@@ -403,6 +469,8 @@ class ObsoleteHQSmokeTests(TestCase):
         response = self.client.get(reverse("part_detail", kwargs={"slug": "buzzer"}))
         self.assertContains(response, "active and passive buzzers")
         self.assertContains(response, "MicroPython: machine.PWM")
+        self.assertContains(response, "KY-006")
+        self.assertContains(response, "KY-012")
 
         response = self.client.get(reverse("part_detail", kwargs={"slug": "dc-motor"}))
         self.assertContains(response, "800mA stall current")
@@ -440,10 +508,12 @@ class ObsoleteHQSmokeTests(TestCase):
         response = self.client.get(reverse("part_detail", kwargs={"slug": "infrared-receiver"}))
         self.assertContains(response, "HX1838")
         self.assertContains(response, "micropython_ir")
+        self.assertContains(response, "KY-022")
 
         response = self.client.get(reverse("part_detail", kwargs={"slug": "joystick-module"}))
         self.assertContains(response, "Two analog axes")
         self.assertContains(response, "dead zone")
+        self.assertContains(response, "KY-023")
 
         response = self.client.get(reverse("part_detail", kwargs={"slug": "4x4-keypad"}))
         self.assertContains(response, "row-column matrix")
@@ -491,6 +561,23 @@ class ObsoleteHQSmokeTests(TestCase):
         self.assertContains(response, "leave at least about one second between reads")
         self.assertContains(response, "DHT11 datasheet PDF")
         self.assertContains(response, "Adafruit: DHT sensor guide")
+        self.assertContains(response, "KY-015")
+
+        response = self.client.get(reverse("part_detail", kwargs={"slug": "laser-transmitter-module"}))
+        self.assertContains(response, "KY-008")
+        self.assertContains(response, "Never point the laser")
+
+        response = self.client.get(reverse("part_detail", kwargs={"slug": "heartbeat-sensor-module"}))
+        self.assertContains(response, "KY-039")
+        self.assertContains(response, "not a medical device")
+
+        response = self.client.get(reverse("part_detail", kwargs={"slug": "infrared-obstacle-avoidance-sensor"}))
+        self.assertContains(response, "KY-032")
+        self.assertContains(response, "precise distance sensor")
+
+        response = self.client.get(reverse("part_detail", kwargs={"slug": "two-color-led-module"}))
+        self.assertContains(response, "KY-011")
+        self.assertContains(response, "KY-029")
 
         response = self.client.get(reverse("part_detail", kwargs={"slug": "raspberry-pi-pico-2-w"}))
         self.assertContains(response, "RP2350")
