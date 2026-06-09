@@ -1937,6 +1937,12 @@ class Command(BaseCommand):
 
         pico_component = Component.objects.get(slug="raspberry-pi-pico-2-w")
         pico_safety = SafetyWarning.objects.get(slug=slugify("Pico GPIO is 3.3V"))
+        breadboard_component = Component.objects.get(slug="breadboard")
+        jumper_component = Component.objects.get(slug="jumper-wires")
+        resistor_component = Component.objects.get(slug="resistor")
+        led_component = Component.objects.get(slug="led")
+        led_bar_component = Component.objects.get(slug="led-bar-graph")
+        rgb_led_component = Component.objects.get(slug="rgb-led")
 
         thonny_credit = "SunFounder Pico 2 W Starter Kit documentation, Install and Introduce Thonny IDE, © 2026 SunFounder."
         self.seed_lesson(
@@ -2346,6 +2352,753 @@ class Command(BaseCommand):
                         "Reference used for the first LED-control idea:\n"
                         "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/pyproject/py_led.html\n\n"
                         "That SunFounder reference uses an external LED circuit. This ObsoleteHQ Week 1 lesson intentionally starts with the Pico 2 W built-in LED so the first code win needs no wiring."
+                    ),
+                },
+            ],
+        )
+
+        week_two_credit = "SunFounder Pico 2 W Starter Kit documentation, MicroPython Projects, © 2026 SunFounder."
+        micropython_pin_docs = "https://docs.micropython.org/en/latest/library/machine.Pin.html"
+        micropython_pwm_docs = "https://docs.micropython.org/en/latest/library/machine.PWM.html"
+
+        self.seed_lesson(
+            code="005",
+            defaults={
+                "title": "Blink an External LED",
+                "slug": "blink-an-external-led",
+                "track": tracks[1],
+                "content_type": LearningExperience.ContentType.GUIDED_BUILD,
+                "difficulty": LearningExperience.Difficulty.BEGINNER,
+                "estimated_time": "25-35 min",
+                "main_skill": "Wire a current-limited external LED and control it from GP15",
+                "prerequisites": "Pico MicroPython is installed, Thonny can run code, and you completed the built-in LED blink.",
+                "summary": "Move from the built-in LED to a real breadboard circuit: LED polarity, resistor placement, GP15 output control, and first wiring debug habits.",
+                "hook": "The built-in LED proved the Pico could listen. Now make a separate part on the breadboard obey your code.",
+                "student_outcome": "Student wires an external LED with a 220 ohm resistor, blinks it from GP15, and explains why polarity and current limiting matter.",
+                "safety_level": LearningExperience.SafetyLevel.LOW,
+                "status": LearningExperience.Status.PUBLISHED,
+                "core_run_week": 2,
+                "core_anchor": True,
+                "a_la_carte": True,
+                "optional_bonus": False,
+                "recommended_after_core": False,
+            },
+            required_kits=[pico],
+            required_components=[pico_component, breadboard_component, jumper_component, resistor_component, led_component],
+            safety_warnings=[pico_safety],
+            sections=[
+                {
+                    "order": 1,
+                    "title": "Mission: make your first outside light",
+                    "section_type": LearningExperienceSection.SectionType.TEXT,
+                    "body": (
+                        "This is your first real output circuit. The Pico will still run a tiny loop, but now the electricity leaves the board, travels through an LED and resistor, then returns to ground.\n\n"
+                        "The goal is not just a blink. The goal is to understand the path: GPIO pin, resistor, LED, ground. When you can trace that path, debugging gets much easier."
+                    ),
+                },
+                {
+                    "order": 2,
+                    "title": "Parts used",
+                    "section_type": LearningExperienceSection.SectionType.PARTS,
+                    "body": (
+                        "Use the lesson sidebar to open each part page before wiring.\n\n"
+                        "- Raspberry Pi Pico 2 W: the controller.\n"
+                        "- Breadboard: the temporary circuit workspace.\n"
+                        "- Jumper wires: the roads between parts.\n"
+                        "- 220 ohm resistor: limits LED current.\n"
+                        "- LED: the output.\n\n"
+                        "The resistor can go on either side of the LED as long as it is in series with it. What matters is that current must pass through the resistor and the LED, not around one of them."
+                    ),
+                },
+                {
+                    "order": 3,
+                    "title": "Circuit map",
+                    "section_type": LearningExperienceSection.SectionType.WIRING,
+                    "static_asset_path": "img/lessons/blink-external-led/sch_hello_led.png",
+                    "static_asset_alt": "Schematic for Pico GP15 controlling an external LED through a resistor",
+                    "static_asset_caption": "Follow the electrical path before moving wires. ",
+                    "static_asset_source_name": week_two_credit,
+                    "static_asset_source_url": "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/_images/sch_hello_led.png",
+                    "body": (
+                        "Read the schematic as a story:\n\n"
+                        "1. GP15 can output 3.3V or 0V.\n"
+                        "2. Current is limited by the resistor.\n"
+                        "3. The LED only lights when it faces the correct direction.\n"
+                        "4. GND completes the return path.\n\n"
+                        "Power off while changing wires. The long LED leg is usually the anode. The short leg and flat side usually mark the cathode."
+                    ),
+                },
+                {
+                    "order": 4,
+                    "title": "Breadboard wiring",
+                    "section_type": LearningExperienceSection.SectionType.WIRING,
+                    "static_asset_path": "img/lessons/blink-external-led/wiring_led.png",
+                    "static_asset_alt": "Breadboard wiring for Pico 2 W, resistor, and external LED",
+                    "static_asset_caption": "Match rows carefully; one row off can break the circuit. ",
+                    "static_asset_source_name": week_two_credit,
+                    "static_asset_source_url": "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/_images/wiring_led.png",
+                    "body": (
+                        "Wire slowly:\n\n"
+                        "- Connect GP15 to the resistor path.\n"
+                        "- Put the resistor in series with the LED.\n"
+                        "- Put the LED cathode side toward GND.\n"
+                        "- Connect the GND rail or row back to a Pico GND pin.\n\n"
+                        "Before USB power goes in, trace the circuit with your finger from GP15 to GND. If your finger can skip the resistor, the circuit is wrong."
+                    ),
+                },
+                {
+                    "order": 5,
+                    "title": "Code: blink GP15",
+                    "section_type": LearningExperienceSection.SectionType.CODE,
+                    "body": (
+                        "from machine import Pin\n"
+                        "from time import sleep\n\n"
+                        "led = Pin(15, Pin.OUT)\n\n"
+                        "while True:\n"
+                        "    led.value(1)\n"
+                        "    sleep(1)\n"
+                        "    led.value(0)\n"
+                        "    sleep(1)\n"
+                    ),
+                },
+                {
+                    "order": 6,
+                    "title": "How the code controls hardware",
+                    "section_type": LearningExperienceSection.SectionType.TEXT,
+                    "body": (
+                        "from machine import Pin imports the MicroPython class that talks to GPIO pins. The official MicroPython Pin docs describe a pin as an object you can configure for input or output.\n\n"
+                        "led = Pin(15, Pin.OUT) creates a GPIO output object for GP15. The number 15 means GP15, not physical pin 15 on every diagram.\n\n"
+                        "led.value(1) drives the output high. On this circuit, high means the LED path gets voltage and the LED lights.\n\n"
+                        "led.value(0) drives the output low, so the LED turns off.\n\n"
+                        "sleep(1) pauses the loop for one second so the blink is visible. Without the pause, the loop would switch too quickly for your eyes."
+                    ),
+                },
+                {
+                    "order": 7,
+                    "title": "Debug checklist",
+                    "section_type": LearningExperienceSection.SectionType.DEBUG,
+                    "body": (
+                        "If the LED stays dark:\n\n"
+                        "- Flip the LED around. Polarity is the most common issue.\n"
+                        "- Confirm the resistor is in series, not sitting in an unconnected row.\n"
+                        "- Confirm the code uses Pin(15) and the wire actually goes to GP15.\n"
+                        "- Confirm GND from the LED path reaches a Pico GND pin.\n"
+                        "- Try the built-in LED lesson again to prove Thonny and the board still work.\n\n"
+                        "If the LED is always on, the circuit may be connected to 3V3 instead of GP15, or the script from another run may still be active. Click Stop and re-check the row."
+                    ),
+                },
+                {
+                    "order": 8,
+                    "title": "Remix: make a signal pattern",
+                    "section_type": LearningExperienceSection.SectionType.REMIX,
+                    "body": (
+                        "Try two changes:\n\n"
+                        "1. Change both sleep values to 0.2 for a fast alert blink.\n"
+                        "2. Make the on time short and the off time long, like sleep(0.1) then sleep(1.5).\n\n"
+                        "Notice that you are not changing the circuit, only the timing logic."
+                    ),
+                },
+                {
+                    "order": 9,
+                    "title": "Checkpoint",
+                    "section_type": LearningExperienceSection.SectionType.CHECKPOINT,
+                    "body": (
+                        "Mark complete when:\n\n"
+                        "- Your external LED blinks from GP15.\n"
+                        "- You can point to the resistor and explain why it is there.\n"
+                        "- You can explain what led.value(1) and led.value(0) do.\n"
+                        "- You tried at least one timing remix."
+                    ),
+                },
+                {
+                    "order": 10,
+                    "title": "Private Dev Log",
+                    "section_type": LearningExperienceSection.SectionType.REFLECTION,
+                    "body": (
+                        "Write a short build note:\n\n"
+                        "1. My LED circuit path was...\n"
+                        "2. The wiring mistake I checked for was...\n"
+                        "3. The blink pattern I made was..."
+                    ),
+                },
+                {
+                    "order": 11,
+                    "title": "References",
+                    "section_type": LearningExperienceSection.SectionType.TEXT,
+                    "body": (
+                        "Primary build reference:\n"
+                        "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/pyproject/py_led.html\n\n"
+                        "MicroPython API reference:\n"
+                        f"{micropython_pin_docs}\n\n"
+                        "ObsoleteHQ uses original lesson wording and code explanation while citing SunFounder wiring/source assets."
+                    ),
+                },
+            ],
+        )
+
+        self.seed_lesson(
+            code="006",
+            defaults={
+                "title": "LED Bar",
+                "slug": "led-bar",
+                "track": tracks[1],
+                "content_type": LearningExperience.ContentType.GUIDED_BUILD,
+                "difficulty": LearningExperience.Difficulty.BEGINNER,
+                "estimated_time": "35-50 min",
+                "main_skill": "Control ten LED outputs with a list and loops",
+                "prerequisites": "You can blink one external LED and explain a current-limiting resistor.",
+                "summary": "Wire an LED bar graph and use MicroPython lists, loops, and helper functions to display rising and falling levels.",
+                "hook": "One LED is a signal. Ten LEDs become a meter.",
+                "student_outcome": "Student drives a 10-segment LED bar graph from GP6-GP15 and explains how a list makes multi-output code easier.",
+                "safety_level": LearningExperience.SafetyLevel.LOW,
+                "status": LearningExperience.Status.PUBLISHED,
+                "core_run_week": 2,
+                "core_anchor": True,
+                "a_la_carte": True,
+                "optional_bonus": False,
+                "recommended_after_core": False,
+            },
+            required_kits=[pico],
+            required_components=[pico_component, breadboard_component, jumper_component, resistor_component, led_bar_component],
+            safety_warnings=[pico_safety],
+            sections=[
+                {
+                    "order": 1,
+                    "title": "Mission: build a tiny level meter",
+                    "section_type": LearningExperienceSection.SectionType.TEXT,
+                    "body": (
+                        "The LED bar graph is ten LEDs in one package. In this lesson, each segment gets its own GPIO output and resistor path.\n\n"
+                        "You will learn the programming move that makes ten outputs manageable: put related pins into a list, then use loops instead of repeating nearly identical code ten times."
+                    ),
+                },
+                {
+                    "order": 2,
+                    "title": "Pin orientation",
+                    "section_type": LearningExperienceSection.SectionType.WIRING,
+                    "static_asset_path": "img/lessons/led-bar/led_bar_pin.png",
+                    "static_asset_alt": "LED bar graph pin orientation reference",
+                    "static_asset_caption": "Confirm the labeled side and segment direction before wiring. ",
+                    "static_asset_source_name": week_two_credit,
+                    "static_asset_source_url": "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/_images/led_bar_pin.png",
+                    "body": (
+                        "Treat the bar graph like ten separate LEDs sharing one plastic body. The package orientation matters.\n\n"
+                        "Before wiring, identify which side is the anode side in the SunFounder reference and compare it with the markings on your actual part. If the bar is rotated 180 degrees, every segment mapping will feel wrong."
+                    ),
+                },
+                {
+                    "order": 3,
+                    "title": "Circuit map",
+                    "section_type": LearningExperienceSection.SectionType.WIRING,
+                    "static_asset_path": "img/lessons/led-bar/sch_display_the_level.png",
+                    "static_asset_alt": "Schematic for ten Pico GPIO pins driving an LED bar graph through resistors",
+                    "static_asset_caption": "Every segment needs a current-limited path. ",
+                    "static_asset_source_name": week_two_credit,
+                    "static_asset_source_url": "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/_images/sch_display_the_level.png",
+                    "body": (
+                        "The key idea is repeated ten times:\n\n"
+                        "- GPIO pin goes high.\n"
+                        "- Current goes through one LED segment.\n"
+                        "- A 220 ohm resistor limits current.\n"
+                        "- The path returns to GND.\n\n"
+                        "Turning on all ten LEDs draws more current than turning on one. Keep the resistors in place and do not bypass them."
+                    ),
+                },
+                {
+                    "order": 4,
+                    "title": "Breadboard wiring",
+                    "section_type": LearningExperienceSection.SectionType.WIRING,
+                    "static_asset_path": "img/lessons/led-bar/wiring_ledbar.png",
+                    "static_asset_alt": "Breadboard wiring for Pico 2 W and LED bar graph",
+                    "static_asset_caption": "The bar uses GP6 through GP15. Double-check every row. ",
+                    "static_asset_source_name": week_two_credit,
+                    "static_asset_source_url": "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/_images/wiring_ledbar.png",
+                    "body": (
+                        "Wire GP6, GP7, GP8, GP9, GP10, GP11, GP12, GP13, GP14, and GP15 to the ten segments according to the diagram.\n\n"
+                        "Debug habit: after wiring, count the GPIO pins out loud from 6 to 15 while pointing at each connection. A skipped number usually means a skipped row."
+                    ),
+                },
+                {
+                    "order": 5,
+                    "title": "Code: rise and fall",
+                    "section_type": LearningExperienceSection.SectionType.CODE,
+                    "body": (
+                        "from machine import Pin\n"
+                        "from time import sleep\n\n"
+                        "pin_numbers = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15]\n"
+                        "segments = [Pin(number, Pin.OUT) for number in pin_numbers]\n\n"
+                        "def set_level(count):\n"
+                        "    for index, segment in enumerate(segments):\n"
+                        "        segment.value(index < count)\n\n"
+                        "while True:\n"
+                        "    for level in range(0, len(segments) + 1):\n"
+                        "        set_level(level)\n"
+                        "        sleep(0.15)\n\n"
+                        "    for level in range(len(segments), -1, -1):\n"
+                        "        set_level(level)\n"
+                        "        sleep(0.15)\n"
+                    ),
+                },
+                {
+                    "order": 6,
+                    "title": "How the code scales up",
+                    "section_type": LearningExperienceSection.SectionType.TEXT,
+                    "body": (
+                        "pin_numbers is a list of the GPIO numbers you wired. Lists keep related values together in order.\n\n"
+                        "segments = [Pin(number, Pin.OUT) for number in pin_numbers] creates one Pin output object for every GPIO number. This is called a list comprehension: a compact loop that builds a new list.\n\n"
+                        "set_level(count) is a helper function. If count is 4, the first four segments turn on and the rest turn off.\n\n"
+                        "enumerate(segments) gives both the position number and the segment object. That lets the code ask, is this segment index lower than the desired level?\n\n"
+                        "range(0, len(segments) + 1) counts from 0 up through 10. The second range counts backward to create the falling animation."
+                    ),
+                },
+                {
+                    "order": 7,
+                    "title": "Debug checklist",
+                    "section_type": LearningExperienceSection.SectionType.DEBUG,
+                    "body": (
+                        "If one segment is dark:\n\n"
+                        "- Check that segment's resistor and row.\n"
+                        "- Check the matching GPIO wire.\n"
+                        "- Swap in a known-good resistor if needed.\n\n"
+                        "If the animation runs backward, the bar graph is probably rotated or wired from the opposite end. That can be okay if you understand it; fix the physical wiring if the displayed direction matters.\n\n"
+                        "If several segments behave together, look for breadboard rows that accidentally connect or a missing ground path."
+                    ),
+                },
+                {
+                    "order": 8,
+                    "title": "Remix: make a scanner",
+                    "section_type": LearningExperienceSection.SectionType.REMIX,
+                    "body": (
+                        "Replace set_level with a one-dot scanner:\n\n"
+                        "def set_single(active_index):\n"
+                        "    for index, segment in enumerate(segments):\n"
+                        "        segment.value(index == active_index)\n\n"
+                        "Then loop through active_index from 0 to 9 and back. This changes the display from a level meter to a moving dot."
+                    ),
+                },
+                {
+                    "order": 9,
+                    "title": "Checkpoint",
+                    "section_type": LearningExperienceSection.SectionType.CHECKPOINT,
+                    "body": (
+                        "Mark complete when:\n\n"
+                        "- All ten LED bar segments can light.\n"
+                        "- The level rises and falls from code.\n"
+                        "- You can explain why the list is better than ten separate variable names.\n"
+                        "- You can identify at least one segment by GPIO number."
+                    ),
+                },
+                {
+                    "order": 10,
+                    "title": "Private Dev Log",
+                    "section_type": LearningExperienceSection.SectionType.REFLECTION,
+                    "body": (
+                        "Write a short build note:\n\n"
+                        "1. The hardest segment to wire was...\n"
+                        "2. A list helped because...\n"
+                        "3. One display idea for an LED bar is..."
+                    ),
+                },
+                {
+                    "order": 11,
+                    "title": "References",
+                    "section_type": LearningExperienceSection.SectionType.TEXT,
+                    "body": (
+                        "Primary build reference:\n"
+                        "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/pyproject/py_led_bar.html\n\n"
+                        "MicroPython API reference:\n"
+                        f"{micropython_pin_docs}"
+                    ),
+                },
+            ],
+        )
+
+        self.seed_lesson(
+            code="007",
+            defaults={
+                "title": "LED Dimming",
+                "slug": "led-dimming",
+                "track": tracks[1],
+                "content_type": LearningExperience.ContentType.SKILL_LAB,
+                "difficulty": LearningExperience.Difficulty.BEGINNER,
+                "estimated_time": "30-45 min",
+                "main_skill": "Use PWM duty cycle to control LED brightness",
+                "prerequisites": "You can wire and blink an external LED on GP15.",
+                "summary": "Use Pulse Width Modulation to fade an LED smoothly and learn duty cycle, frequency, range, and cleanup.",
+                "hook": "A digital pin only knows on and off. PWM makes it look like it knows dim and bright.",
+                "student_outcome": "Student controls external LED brightness with MicroPython PWM and explains frequency and 16-bit duty cycle values.",
+                "safety_level": LearningExperience.SafetyLevel.LOW,
+                "status": LearningExperience.Status.PUBLISHED,
+                "core_run_week": 2,
+                "core_anchor": True,
+                "a_la_carte": True,
+                "optional_bonus": False,
+                "recommended_after_core": False,
+            },
+            required_kits=[pico],
+            required_components=[pico_component, breadboard_component, jumper_component, resistor_component, led_component],
+            safety_warnings=[pico_safety],
+            sections=[
+                {
+                    "order": 1,
+                    "title": "Mission: fade instead of blink",
+                    "section_type": LearningExperienceSection.SectionType.TEXT,
+                    "body": (
+                        "Blinking switches an LED fully on and fully off. Dimming uses PWM: the pin switches very quickly, and your eyes average the pulses into brightness.\n\n"
+                        "You will reuse the external LED circuit, then change only the code."
+                    ),
+                },
+                {
+                    "order": 2,
+                    "title": "PWM in one picture",
+                    "section_type": LearningExperienceSection.SectionType.MEDIA,
+                    "static_asset_path": "img/lessons/led-dimming/pwm_duty_cycle.png",
+                    "static_asset_alt": "PWM duty cycle diagram showing different on-time percentages",
+                    "static_asset_caption": "Duty cycle is the fraction of each cycle spent on. ",
+                    "static_asset_source_name": week_two_credit,
+                    "static_asset_source_url": "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/_images/pwm_duty_cycle.png",
+                    "body": (
+                        "Duty cycle is the important knob. A low duty cycle means short on-pulses and a dim LED. A high duty cycle means long on-pulses and a bright LED.\n\n"
+                        "Frequency is how often the pulse pattern repeats. For visible LEDs, 1000 Hz is fast enough that the LED appears steady instead of flickery."
+                    ),
+                },
+                {
+                    "order": 3,
+                    "title": "PWM-capable pins",
+                    "section_type": LearningExperienceSection.SectionType.MEDIA,
+                    "static_asset_path": "img/lessons/led-dimming/pin_pic.png",
+                    "static_asset_alt": "Pico 2 W pin reference showing PWM-capable GPIO pins",
+                    "static_asset_caption": "Many Pico GPIO pins can use PWM, including GP15 in this lesson. ",
+                    "static_asset_source_name": week_two_credit,
+                    "static_asset_source_url": "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/_images/pin_pic.png",
+                    "body": (
+                        "The Pico can create PWM on many GPIO pins. This lesson stays on GP15 so the external LED wiring remains familiar.\n\n"
+                        "Later, shared PWM slices can matter when two pins need different frequencies. For now, one LED on one PWM pin keeps the idea clean."
+                    ),
+                },
+                {
+                    "order": 4,
+                    "title": "Reuse the LED circuit",
+                    "section_type": LearningExperienceSection.SectionType.WIRING,
+                    "static_asset_path": "img/lessons/led-dimming/wiring_led.png",
+                    "static_asset_alt": "Breadboard wiring for Pico 2 W, resistor, and external LED on GP15",
+                    "static_asset_caption": "Same LED circuit, new control style. ",
+                    "static_asset_source_name": week_two_credit,
+                    "static_asset_source_url": "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/_images/wiring_led.png",
+                    "body": (
+                        "Use the same GP15, resistor, LED, and GND path from the external LED lesson.\n\n"
+                        "Do not remove the resistor just because the LED is dimming. PWM changes timing, not the need for current limiting."
+                    ),
+                },
+                {
+                    "order": 5,
+                    "title": "Code: smooth fade loop",
+                    "section_type": LearningExperienceSection.SectionType.CODE,
+                    "body": (
+                        "from machine import Pin, PWM\n"
+                        "from time import sleep\n\n"
+                        "led = PWM(Pin(15))\n"
+                        "led.freq(1000)\n\n"
+                        "try:\n"
+                        "    while True:\n"
+                        "        for duty in range(0, 65536, 1024):\n"
+                        "            led.duty_u16(duty)\n"
+                        "            sleep(0.01)\n\n"
+                        "        for duty in range(65535, -1, -1024):\n"
+                        "            led.duty_u16(duty)\n"
+                        "            sleep(0.01)\n"
+                        "finally:\n"
+                        "    led.duty_u16(0)\n"
+                        "    led.deinit()\n"
+                    ),
+                },
+                {
+                    "order": 6,
+                    "title": "How the PWM code works",
+                    "section_type": LearningExperienceSection.SectionType.TEXT,
+                    "body": (
+                        "PWM(Pin(15)) turns GP15 into a PWM output object.\n\n"
+                        "led.freq(1000) sets the pulse frequency to 1000 cycles per second.\n\n"
+                        "MicroPython duty_u16 uses a 16-bit number. 0 means always off, 65535 means almost always on, and values between those extremes create different brightness levels.\n\n"
+                        "range(0, 65536, 1024) walks upward in chunks instead of jumping straight to full brightness.\n\n"
+                        "The second loop counts down, creating the fade-out.\n\n"
+                        "finally runs when you stop the program from Thonny. It turns the LED off and releases the PWM peripheral."
+                    ),
+                },
+                {
+                    "order": 7,
+                    "title": "Debug checklist",
+                    "section_type": LearningExperienceSection.SectionType.DEBUG,
+                    "body": (
+                        "If the LED only blinks or stays solid:\n\n"
+                        "- Confirm the code uses PWM(Pin(15)), not Pin(15, Pin.OUT).\n"
+                        "- Confirm duty_u16 is spelled with the underscore.\n"
+                        "- Check that the external LED circuit still works with the simple blink code.\n"
+                        "- Try a larger sleep value like 0.03 to make the fade easier to see.\n\n"
+                        "If the LED flickers visibly, try a higher frequency like 2000. If it is too bright, reduce the maximum duty value in the loop."
+                    ),
+                },
+                {
+                    "order": 8,
+                    "title": "Remix: breathe pattern",
+                    "section_type": LearningExperienceSection.SectionType.REMIX,
+                    "body": (
+                        "Make the fade feel like a breathing status light:\n\n"
+                        "- Use a smaller step like 512 for smoother changes.\n"
+                        "- Add sleep(0.4) at full brightness.\n"
+                        "- Add sleep(0.8) after turning fully off.\n\n"
+                        "Small timing changes can make the same circuit feel calm, urgent, or playful."
+                    ),
+                },
+                {
+                    "order": 9,
+                    "title": "Checkpoint",
+                    "section_type": LearningExperienceSection.SectionType.CHECKPOINT,
+                    "body": (
+                        "Mark complete when:\n\n"
+                        "- Your external LED fades up and down.\n"
+                        "- You can explain duty cycle without using the word magic.\n"
+                        "- You changed either the step size, frequency, or sleep timing and observed the result.\n"
+                        "- You can explain why the resistor is still required."
+                    ),
+                },
+                {
+                    "order": 10,
+                    "title": "Private Dev Log",
+                    "section_type": LearningExperienceSection.SectionType.REFLECTION,
+                    "body": (
+                        "Write a short build note:\n\n"
+                        "1. PWM makes brightness by...\n"
+                        "2. My best fade setting was...\n"
+                        "3. A project that needs dimming is..."
+                    ),
+                },
+                {
+                    "order": 11,
+                    "title": "References",
+                    "section_type": LearningExperienceSection.SectionType.TEXT,
+                    "body": (
+                        "Primary build reference:\n"
+                        "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/pyproject/py_fade.html\n\n"
+                        "MicroPython API reference:\n"
+                        f"{micropython_pwm_docs}"
+                    ),
+                },
+            ],
+        )
+
+        self.seed_lesson(
+            code="008",
+            defaults={
+                "title": "RGB Light",
+                "slug": "rgb-light",
+                "track": tracks[1],
+                "content_type": LearningExperience.ContentType.GUIDED_BUILD,
+                "difficulty": LearningExperience.Difficulty.BEGINNER,
+                "estimated_time": "40-55 min",
+                "main_skill": "Mix red, green, and blue LED channels with three PWM outputs",
+                "prerequisites": "You can use PWM to dim one external LED.",
+                "summary": "Wire a common-cathode RGB LED and use three PWM channels to mix colors with 0-255 color values.",
+                "hook": "One PWM channel makes brightness. Three channels make color.",
+                "student_outcome": "Student wires a common-cathode RGB LED, controls red/green/blue PWM channels, and explains additive color mixing.",
+                "safety_level": LearningExperience.SafetyLevel.LOW,
+                "status": LearningExperience.Status.PUBLISHED,
+                "core_run_week": 2,
+                "core_anchor": True,
+                "a_la_carte": True,
+                "optional_bonus": False,
+                "recommended_after_core": False,
+            },
+            required_kits=[pico],
+            required_components=[pico_component, breadboard_component, jumper_component, resistor_component, rgb_led_component],
+            safety_warnings=[pico_safety],
+            sections=[
+                {
+                    "order": 1,
+                    "title": "Mission: mix your own color",
+                    "section_type": LearningExperienceSection.SectionType.TEXT,
+                    "body": (
+                        "An RGB LED is three LEDs in one body: red, green, and blue. By changing the brightness of each channel, you can mix colors like a tiny display pixel.\n\n"
+                        "This is also your first lesson with multiple PWM outputs working together."
+                    ),
+                },
+                {
+                    "order": 2,
+                    "title": "Color mixing",
+                    "section_type": LearningExperienceSection.SectionType.MEDIA,
+                    "static_asset_path": "img/lessons/rgb-light/rgb_mix.png",
+                    "static_asset_alt": "Additive RGB color mixing diagram",
+                    "static_asset_caption": "RGB light mixes additively: more light is added together. ",
+                    "static_asset_source_name": week_two_credit,
+                    "static_asset_source_url": "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/_images/rgb_mix.png",
+                    "body": (
+                        "This is additive color mixing because you are combining light.\n\n"
+                        "- Red plus green makes yellow.\n"
+                        "- Red plus blue makes magenta.\n"
+                        "- Green plus blue makes cyan.\n"
+                        "- Red plus green plus blue makes white when the channels are balanced.\n\n"
+                        "Real LEDs are not perfectly balanced, so your white may look slightly tinted. That is normal."
+                    ),
+                },
+                {
+                    "order": 3,
+                    "title": "RGB LED pin map",
+                    "section_type": LearningExperienceSection.SectionType.WIRING,
+                    "static_asset_path": "img/lessons/rgb-light/rgb_pin.jpg",
+                    "static_asset_alt": "RGB LED pinout reference for common cathode LED",
+                    "static_asset_caption": "The longest pin is the common cathode in the SunFounder kit reference. ",
+                    "static_asset_source_name": week_two_credit,
+                    "static_asset_source_url": "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/_images/rgb_pin.jpg",
+                    "body": (
+                        "The kit RGB LED is common cathode. That means the shared longest pin goes to GND.\n\n"
+                        "The separate red, green, and blue pins each need their own resistor path. Do not use one resistor on the shared cathode for this beginner build; each color channel should be current-limited independently."
+                    ),
+                },
+                {
+                    "order": 4,
+                    "title": "Circuit map",
+                    "section_type": LearningExperienceSection.SectionType.WIRING,
+                    "static_asset_path": "img/lessons/rgb-light/sch_colorful_light.png",
+                    "static_asset_alt": "Schematic for Pico 2 W controlling RGB LED with three PWM pins",
+                    "static_asset_caption": "GP13, GP14, and GP15 control red, green, and blue channels. ",
+                    "static_asset_source_name": week_two_credit,
+                    "static_asset_source_url": "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/_images/sch_colorful_light.png",
+                    "body": (
+                        "The three PWM channels work like three dimmers:\n\n"
+                        "- GP13 controls red.\n"
+                        "- GP14 controls green.\n"
+                        "- GP15 controls blue.\n"
+                        "- The common cathode goes to GND.\n\n"
+                        "SunFounder uses a larger resistor for red because red LEDs often reach similar brightness at a lower forward voltage than green or blue."
+                    ),
+                },
+                {
+                    "order": 5,
+                    "title": "Breadboard wiring",
+                    "section_type": LearningExperienceSection.SectionType.WIRING,
+                    "static_asset_path": "img/lessons/rgb-light/wiring_colorful_light.png",
+                    "static_asset_alt": "Breadboard wiring for Pico 2 W and common cathode RGB LED",
+                    "static_asset_caption": "Use separate resistor paths for red, green, and blue. ",
+                    "static_asset_source_name": week_two_credit,
+                    "static_asset_source_url": "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/_images/wiring_colorful_light.png",
+                    "body": (
+                        "Wire with power disconnected:\n\n"
+                        "- Common cathode to GND.\n"
+                        "- Red channel to GP13 through a resistor.\n"
+                        "- Green channel to GP14 through a resistor.\n"
+                        "- Blue channel to GP15 through a resistor.\n\n"
+                        "If a color does not match the code, do not panic. That usually means two color legs were swapped."
+                    ),
+                },
+                {
+                    "order": 6,
+                    "title": "Code: color cycle",
+                    "section_type": LearningExperienceSection.SectionType.CODE,
+                    "body": (
+                        "from machine import Pin, PWM\n"
+                        "from time import sleep\n\n"
+                        "red = PWM(Pin(13))\n"
+                        "green = PWM(Pin(14))\n"
+                        "blue = PWM(Pin(15))\n\n"
+                        "for channel in (red, green, blue):\n"
+                        "    channel.freq(1000)\n\n"
+                        "def scale(value):\n"
+                        "    return int(value * 65535 / 255)\n\n"
+                        "def set_color(r, g, b):\n"
+                        "    red.duty_u16(scale(r))\n"
+                        "    green.duty_u16(scale(g))\n"
+                        "    blue.duty_u16(scale(b))\n\n"
+                        "colors = [\n"
+                        "    (\"red\", 255, 0, 0),\n"
+                        "    (\"green\", 0, 255, 0),\n"
+                        "    (\"blue\", 0, 0, 255),\n"
+                        "    (\"yellow\", 255, 180, 0),\n"
+                        "    (\"cyan\", 0, 255, 255),\n"
+                        "    (\"magenta\", 255, 0, 255),\n"
+                        "    (\"white\", 255, 180, 140),\n"
+                        "]\n\n"
+                        "try:\n"
+                        "    while True:\n"
+                        "        for name, r, g, b in colors:\n"
+                        "            print(name)\n"
+                        "            set_color(r, g, b)\n"
+                        "            sleep(1)\n"
+                        "finally:\n"
+                        "    set_color(0, 0, 0)\n"
+                        "    for channel in (red, green, blue):\n"
+                        "        channel.deinit()\n"
+                    ),
+                },
+                {
+                    "order": 7,
+                    "title": "How the color code works",
+                    "section_type": LearningExperienceSection.SectionType.TEXT,
+                    "body": (
+                        "red, green, and blue are three PWM output objects. Each one controls one LED channel.\n\n"
+                        "for channel in (red, green, blue): sets the same frequency on all three channels without writing the same line three times.\n\n"
+                        "scale(value) converts a familiar 0-255 color value into MicroPython's 0-65535 duty_u16 range.\n\n"
+                        "set_color(r, g, b) is a helper function. It takes three color values and sends the scaled brightness to the three PWM channels.\n\n"
+                        "colors is a list of tuples. Each tuple contains a name plus red, green, and blue values.\n\n"
+                        "print(name) writes the current color to the Thonny shell so you can compare what the code thinks it is showing with what your eyes see."
+                    ),
+                },
+                {
+                    "order": 8,
+                    "title": "Debug checklist",
+                    "section_type": LearningExperienceSection.SectionType.DEBUG,
+                    "body": (
+                        "If no colors light:\n\n"
+                        "- Check that the common cathode goes to GND.\n"
+                        "- Check that each color channel has a resistor.\n"
+                        "- Confirm GP13, GP14, and GP15 match the code.\n\n"
+                        "If red and blue are swapped, swap the wires or update the pin numbers in code.\n\n"
+                        "If white looks too red, lower the red value in the white tuple. Color balancing is normal with real LEDs."
+                    ),
+                },
+                {
+                    "order": 9,
+                    "title": "Remix: make a status palette",
+                    "section_type": LearningExperienceSection.SectionType.REMIX,
+                    "body": (
+                        "Create your own named color list:\n\n"
+                        "- charging: orange\n"
+                        "- ready: green\n"
+                        "- warning: red\n"
+                        "- thinking: blue\n\n"
+                        "Then replace the color cycle with your status palette. You are building the color language a future project could use."
+                    ),
+                },
+                {
+                    "order": 10,
+                    "title": "Checkpoint",
+                    "section_type": LearningExperienceSection.SectionType.CHECKPOINT,
+                    "body": (
+                        "Mark complete when:\n\n"
+                        "- Red, green, and blue all light under code control.\n"
+                        "- You made at least three mixed colors.\n"
+                        "- You can explain common cathode.\n"
+                        "- You can explain why scale() is needed for 0-255 color values."
+                    ),
+                },
+                {
+                    "order": 11,
+                    "title": "Private Dev Log",
+                    "section_type": LearningExperienceSection.SectionType.REFLECTION,
+                    "body": (
+                        "Write a short build note:\n\n"
+                        "1. My best color was...\n"
+                        "2. One wiring issue I checked was...\n"
+                        "3. A project that needs a status color is..."
+                    ),
+                },
+                {
+                    "order": 12,
+                    "title": "References",
+                    "section_type": LearningExperienceSection.SectionType.TEXT,
+                    "body": (
+                        "Primary build reference:\n"
+                        "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/pyproject/py_rgb.html\n\n"
+                        "MicroPython API reference:\n"
+                        f"{micropython_pwm_docs}"
                     ),
                 },
             ],

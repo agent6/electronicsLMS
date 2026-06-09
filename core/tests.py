@@ -233,6 +233,67 @@ class ObsoleteHQSmokeTests(TestCase):
         self.assertContains(blink, "built-in LED")
         self.assertNotContains(blink, "wiring_led.png")
 
+    def test_seed_creates_week_two_first_output_lessons(self):
+        user = self.make_user()
+        call_command("seed_obsoletehq", verbosity=0)
+        expected = [
+            ("005", "Blink an External LED", "blink-an-external-led"),
+            ("006", "LED Bar", "led-bar"),
+            ("007", "LED Dimming", "led-dimming"),
+            ("008", "RGB Light", "rgb-light"),
+        ]
+        self.assertEqual(
+            list(
+                LearningExperience.objects.filter(core_run_week=2, core_anchor=True)
+                .order_by("code")
+                .values_list("code", "title", "slug")
+            ),
+            expected,
+        )
+        for code, title, slug in expected:
+            lesson = LearningExperience.objects.get(code=code)
+            self.assertEqual(lesson.track.number, 1)
+            self.assertEqual(lesson.status, LearningExperience.Status.PUBLISHED)
+            self.assertTrue(lesson.a_la_carte)
+            self.assertGreaterEqual(lesson.sections.filter(published=True).count(), 10)
+            self.assertTrue(lesson.sections.filter(section_type=LearningExperienceSection.SectionType.CODE).exists())
+            response = self.client.get(reverse("learning_experience", kwargs={"slug": slug}))
+            self.assertContains(response, title)
+            self.assertContains(response, "Image source:")
+            self.assertContains(response, "SunFounder Pico 2 W Starter Kit documentation")
+            self.assertContains(response, "MicroPython API reference")
+            self.assertNotContains(response, "This published lesson needs")
+
+        external_led = self.client.get(reverse("learning_experience", kwargs={"slug": "blink-an-external-led"}))
+        self.assertContains(external_led, "wiring_led.png")
+        self.assertContains(external_led, "sch_hello_led.png")
+        self.assertContains(external_led, "led = Pin(15, Pin.OUT)")
+        self.assertContains(external_led, reverse("part_detail", kwargs={"slug": "led"}))
+        self.assertContains(external_led, "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/pyproject/py_led.html")
+
+        led_bar = self.client.get(reverse("learning_experience", kwargs={"slug": "led-bar"}))
+        self.assertContains(led_bar, "wiring_ledbar.png")
+        self.assertContains(led_bar, "sch_display_the_level.png")
+        self.assertContains(led_bar, "segments = [Pin(number, Pin.OUT) for number in pin_numbers]")
+        self.assertContains(led_bar, reverse("part_detail", kwargs={"slug": "led-bar-graph"}))
+
+        dimming = self.client.get(reverse("learning_experience", kwargs={"slug": "led-dimming"}))
+        self.assertContains(dimming, "pwm_duty_cycle.png")
+        self.assertContains(dimming, "led = PWM(Pin(15))")
+        self.assertContains(dimming, "duty_u16")
+        self.assertContains(dimming, "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/pyproject/py_fade.html")
+
+        rgb = self.client.get(reverse("learning_experience", kwargs={"slug": "rgb-light"}))
+        self.assertContains(rgb, "wiring_colorful_light.png")
+        self.assertContains(rgb, "rgb_mix.png")
+        self.assertContains(rgb, "def set_color(r, g, b):")
+        self.assertContains(rgb, reverse("part_detail", kwargs={"slug": "rgb-led"}))
+
+        self.client.force_login(user)
+        response = self.client.get(reverse("core_run_week", kwargs={"week_number": 2}))
+        for _, title, _ in expected:
+            self.assertContains(response, title)
+
     def test_seed_creates_basic_part_pages_with_assets_and_resources(self):
         self.make_user()
         call_command("seed_obsoletehq", verbosity=0)

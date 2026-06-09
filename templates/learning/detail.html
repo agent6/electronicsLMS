@@ -60,7 +60,14 @@
             <div><dt class="font-black">Kit</dt><dd class="text-ink-soft">{% for kit in experience.required_kits.all %}{{ kit.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</dd></div>
           {% endif %}
           {% if experience.required_components.all %}
-            <div><dt class="font-black">Parts</dt><dd class="text-ink-soft">{% for component in experience.required_components.all %}{{ component.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</dd></div>
+            <div>
+              <dt class="font-black">Parts</dt>
+              <dd class="text-ink-soft">
+                {% for component in experience.required_components.all %}
+                  <a class="font-bold text-brand-blue" href="{% url 'part_detail' component.slug %}">{{ component.name }}</a>{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+              </dd>
+            </div>
           {% endif %}
           {% if experience.safety_warnings.all %}
             <div><dt class="font-black">Safety notes</dt><dd class="text-ink-soft">{% for warning in experience.safety_warnings.all %}{{ warning.title }}{% if not forloop.last %}, {% endif %}{% endfor %}</dd></div>
