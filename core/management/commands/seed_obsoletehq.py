@@ -140,7 +140,6 @@ class Command(BaseCommand):
             ("LED", Component.SignalType.DIGITAL, "Use a resistor"),
             ("Resistor", Component.SignalType.OTHER, "Current limiting"),
             ("Potentiometer", Component.SignalType.ANALOG, "3.3V analog input"),
-            ("DHT11 Sensor", Component.SignalType.DIGITAL, "3.3V data signal"),
             ("Servo", Component.SignalType.PWM, "Use appropriate power"),
             ("MFRC522 RFID Module", Component.SignalType.SPI, "Check 3.3V compatibility"),
             ("I2C LCD1602", Component.SignalType.I2C, "Check backpack voltage"),
@@ -166,6 +165,94 @@ class Command(BaseCommand):
         sf_component_source = "SunFounder Pico 2 W Starter Kit documentation, Components section, © 2026 SunFounder."
         RT = ComponentResource.ResourceType
         BASIC_SOURCE = "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/component/"
+
+        Component.objects.filter(slug="dht11-sensor").delete()
+
+        pico_source_credit = "SunFounder Pico 2 W Starter Kit documentation, Getting to Know Pico 2 W, © 2026 SunFounder."
+        self.seed_component(
+            slug="raspberry-pi-pico-2-w",
+            defaults={
+                "name": "Raspberry Pi Pico 2 W",
+                "category": "Board",
+                "description": (
+                    "Raspberry Pi Pico 2 W is the main microcontroller board for ObsoleteHQ. It combines the RP2350 microcontroller, onboard wireless hardware, USB programming, power regulation, and breadboard-friendly GPIO pins."
+                ),
+                "how_it_is_used": (
+                    "Students plug it into Thonny over USB, run MicroPython, and use GPIO pins to read sensors or control outputs. In early lessons it drives LEDs, PWM brightness, RGB color, and simple breadboard circuits; later it becomes the controller for displays, sensors, motors through drivers, and Wi-Fi projects."
+                ),
+                "signal_type": Component.SignalType.OTHER,
+                "power_requirement": "USB power for beginner lessons. GPIO logic is 3.3V only. Use 3V3/GND rails carefully and do not use GPIO pins as power supplies for loads.",
+                "pins": "40-pin edge layout with power, ground, ADC-capable pins, and multifunction GPIO. Use the printed GP numbers and the pinout diagram before wiring.",
+                "pinout_notes": (
+                    "GPIO labels such as GP15 are not the same as physical pin position numbers. Many GPIO pins can also provide PWM, I2C, SPI, or UART functions depending on the code. ADC-capable pins are for analog input and still need Pico-safe voltage."
+                ),
+                "datasheet_notes": (
+                    "Raspberry Pi documentation identifies Pico 2 W as an RP2350-based Pico-series board with onboard wireless networking using the Infineon CYW43439 radio. Use the official Pico 2 W datasheet and Pico-series documentation for electrical limits, pin functions, reset/BOOTSEL behavior, and power details."
+                ),
+                "main_component": "Raspberry Pi RP2350 microcontroller with onboard wireless radio hardware.",
+                "discrete_parts": (
+                    "RP2350 microcontroller, USB connector, BOOTSEL button, status LED, crystal/clock circuitry, flash memory, power regulation, castellated pin edges, antenna/wireless section, debug pads, and support passives."
+                ),
+                "libraries": "Use MicroPython modules such as machine.Pin, machine.PWM, machine.ADC, machine.I2C, machine.SPI, machine.UART, network, and time/utime depending on the project.",
+                "voltage_notes": (
+                    "Pico GPIO is not 5V tolerant. Keep GPIO signals between 0V and 3.3V. Use level shifting or divider circuits when a module can output 5V."
+                ),
+                "safety_notes": (
+                    "Unplug USB before rewiring. Avoid shorting 3V3 to GND. Do not power motors, relays, pumps, LED strips, or high-current loads from GPIO pins."
+                ),
+                "common_mistakes": (
+                    "Using physical pin numbers instead of GP numbers, feeding 5V into GPIO, forgetting shared ground, using a charge-only USB cable, wiring while powered, and expecting a GPIO pin to supply load current."
+                ),
+                "source_name": "SunFounder: Getting to Know Pico 2 W",
+                "source_url": "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/introduction_to_pico_2w.html",
+                "attribution": pico_source_credit,
+            },
+            kits=[pico],
+            assets=[
+                {
+                    "title": "Pico 2 W board",
+                    "static_asset_path": "img/parts/boards/pico_2w_side.png",
+                    "alt_text": "Raspberry Pi Pico 2 W board side view",
+                    "caption": "Board landmarks include USB, BOOTSEL, RP2350, wireless area, and the two GPIO rows.",
+                    "source_name": pico_source_credit,
+                    "source_url": "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/_images/pico_2w_side.png",
+                },
+                {
+                    "title": "Pico 2 W pinout",
+                    "static_asset_path": "img/parts/boards/pico-2-w-pinout.png",
+                    "alt_text": "Raspberry Pi Pico 2 W pinout diagram",
+                    "caption": "Use this as the wiring map for GP numbers, power pins, ground pins, and alternate functions.",
+                    "source_name": pico_source_credit,
+                    "source_url": "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/_images/pico-2-w-pinout.png",
+                },
+            ],
+            resources=[
+                {
+                    "title": "SunFounder: Getting to Know Pico 2 W",
+                    "url": "https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/introduction_to_pico_2w.html",
+                    "resource_type": RT.SUNFOUNDER,
+                    "notes": "Source page for board landmarks, pinout images, Pico 2 W specs overview, and starter-kit context.",
+                },
+                {
+                    "title": "Raspberry Pi: Pico-series documentation",
+                    "url": "https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html",
+                    "resource_type": RT.GUIDE,
+                    "notes": "Official Raspberry Pi documentation for Pico 2 W board details, setup, and Pico-series hardware references.",
+                },
+                {
+                    "title": "Raspberry Pi: RP2350 documentation",
+                    "url": "https://www.raspberrypi.com/documentation/microcontrollers/silicon.html#rp2350",
+                    "resource_type": RT.DATASHEET,
+                    "notes": "Official RP2350 silicon reference for the microcontroller used on Pico 2 W.",
+                },
+                {
+                    "title": "MicroPython: machine.Pin",
+                    "url": "https://docs.micropython.org/en/latest/library/machine.Pin.html",
+                    "resource_type": RT.LIBRARY,
+                    "notes": "Primary API students use for Pico GPIO input/output.",
+                },
+            ],
+        )
 
         self.seed_component(
             slug="breadboard",
@@ -1722,19 +1809,19 @@ class Command(BaseCommand):
             defaults={
                 "name": "DHT11 Humiture Sensor",
                 "category": "Sensor",
-                "description": "The DHT11 is a digital temperature and humidity sensor module.",
-                "how_it_is_used": "Students use it for room monitors, plant projects, IoT weather dashboards, comfort indicators, and digital-sensor timing lessons.",
+                "description": "The DHT11 is a digital temperature and humidity sensor module. It reports relative humidity and temperature over a single DATA line using a timing-based 40-bit message.",
+                "how_it_is_used": "Students use it for room monitors, plant projects, IoT weather dashboards, comfort indicators, and digital-sensor timing lessons. It is slow and low-cost, so it is good for learning environmental sensing, not for precision measurement.",
                 "signal_type": Component.SignalType.ONE_WIRE,
-                "power_requirement": "SunFounder lists working voltage as DC 5V. Confirm module output behavior before direct Pico GPIO connection.",
+                "power_requirement": "SunFounder lists working voltage as DC 5V. Confirm module output behavior before direct Pico GPIO connection; for beginner Pico builds, prefer a 3.3V-safe module supply/data path when supported.",
                 "pins": "VCC, GND, and DATA.",
-                "pinout_notes": "SunFounder describes a start signal on DATA, a DHT11 response, then 40 bits: humidity integer/decimal, temperature integer/decimal, and checksum.",
-                "datasheet_notes": "SunFounder lists 20-90%RH humidity range, 0-60C temperature range, +/-5%RH humidity accuracy, +/-2C temperature accuracy, digital output, and 2.0 x 2.0cm PCB.",
+                "pinout_notes": "DATA is a bidirectional timing signal. SunFounder describes a start signal from the controller, a DHT11 response, then 40 bits: humidity integer, humidity decimal, temperature integer, temperature decimal, and checksum.",
+                "datasheet_notes": "SunFounder lists 20-90%RH humidity range, 0-60C temperature range, +/-5%RH humidity accuracy, +/-2C temperature accuracy, digital output, and 2.0 x 2.0cm PCB. Many DHT11 references also note slow refresh; leave at least about one second between reads.",
                 "main_component": "DHT11 digital temperature and humidity sensor.",
-                "discrete_parts": "Resistive humidity element, NTC temperature element, internal 8-bit microcontroller, DATA line, power pins, and module PCB.",
-                "libraries": "Use MicroPython's dht module where available. Read slowly enough for the sensor and handle checksum/read errors.",
+                "discrete_parts": "Resistive humidity element, NTC temperature element, internal 8-bit microcontroller, DATA line, power pins, module PCB, and support resistor/passive components depending on the module.",
+                "libraries": "Use MicroPython's dht module where available: create dht.DHT11(Pin(...)), call measure(), then read temperature() and humidity(). Read slowly enough for the sensor and handle checksum/read errors.",
                 "voltage_notes": "If powered at 5V, verify DATA is level-shifted or otherwise safe for Pico GPIO. Many beginner builds should use 3.3V-compatible wiring if the module supports it.",
-                "safety_notes": "Educational environmental sensor only. Do not use it for health, medical, or safety-critical decisions.",
-                "common_mistakes": "Polling too quickly, ignoring checksum/read failures, expecting fast response or high accuracy, and connecting DATA to a non-safe voltage level.",
+                "safety_notes": "Educational environmental sensor only. Do not use it for health, medical, fire, freezer, pet, plant-critical, or safety-critical decisions.",
+                "common_mistakes": "Polling too quickly, ignoring checksum/read failures, expecting fast response or high accuracy, forgetting shared ground, using the wrong DATA pin in code, and connecting DATA to a non-safe voltage level.",
                 "source_name": "SunFounder DHT11 Humiture Sensor component page",
                 "source_url": f"{BASIC_SOURCE}component_humiture.html",
                 "attribution": sf_component_source,
@@ -1746,7 +1833,8 @@ class Command(BaseCommand):
             resources=[
                 {"title": "SunFounder: DHT11 Humiture Sensor", "url": f"{BASIC_SOURCE}component_humiture.html", "resource_type": RT.SUNFOUNDER, "notes": "Source page for DHT11 overview, pin count, 40-bit data format, specs, datasheet link, and image."},
                 {"title": "SunFounder: DHT11 datasheet PDF", "url": "http://wiki.sunfounder.cc/images/c/c7/DHT11_datasheet.pdf", "resource_type": RT.DATASHEET, "notes": "Validated DHT11 datasheet PDF linked by SunFounder."},
-                {"title": "MicroPython: DHT tutorial", "url": "https://docs.micropython.org/en/latest/esp8266/tutorial/dht.html", "resource_type": RT.LIBRARY, "notes": "MicroPython reference for reading DHT sensors with the dht module."},
+                {"title": "MicroPython: DHT tutorial", "url": "https://docs.micropython.org/en/latest/esp8266/tutorial/dht.html", "resource_type": RT.LIBRARY, "notes": "MicroPython reference for reading DHT sensors with the dht module and leaving time between measurements."},
+                {"title": "Adafruit: DHT sensor guide", "url": "https://learn.adafruit.com/dht", "resource_type": RT.GUIDE, "notes": "Practical DHT11/DHT22 guide for wiring habits, read timing, and reliability expectations."},
             ],
         )
 

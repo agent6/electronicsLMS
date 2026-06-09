@@ -298,6 +298,7 @@ class ObsoleteHQSmokeTests(TestCase):
         self.make_user()
         call_command("seed_obsoletehq", verbosity=0)
         expected = {
+            "raspberry-pi-pico-2-w": (2, 4),
             "breadboard": (2, 1),
             "jumper-wires": (1, 1),
             "resistor": (4, 2),
@@ -336,12 +337,14 @@ class ObsoleteHQSmokeTests(TestCase):
             "pir-motion-sensor-module": (3, 4),
             "water-level-sensor-module": (1, 3),
             "ultrasonic-module": (2, 4),
-            "dht11-humiture-sensor": (1, 3),
+            "dht11-humiture-sensor": (1, 4),
             "mpu6050-module": (4, 4),
         }
+        self.assertFalse(Component.objects.filter(slug="dht11-sensor").exists())
+        self.assertEqual(Component.objects.filter(name__icontains="DHT11").count(), 1)
         for slug, (asset_count, resource_count) in expected.items():
             component = Component.objects.get(slug=slug)
-            self.assertIn(component.category, {"Basic", "Chip", "Display", "Sound", "Actuator", "Controller", "Sensor"})
+            self.assertIn(component.category, {"Board", "Basic", "Chip", "Display", "Sound", "Actuator", "Controller", "Sensor"})
             self.assertEqual(component.assets.count(), asset_count)
             self.assertEqual(component.resources.count(), resource_count)
             self.assertTrue(component.source_url)
@@ -485,7 +488,16 @@ class ObsoleteHQSmokeTests(TestCase):
 
         response = self.client.get(reverse("part_detail", kwargs={"slug": "dht11-humiture-sensor"}))
         self.assertContains(response, "40 bits")
+        self.assertContains(response, "leave at least about one second between reads")
         self.assertContains(response, "DHT11 datasheet PDF")
+        self.assertContains(response, "Adafruit: DHT sensor guide")
+
+        response = self.client.get(reverse("part_detail", kwargs={"slug": "raspberry-pi-pico-2-w"}))
+        self.assertContains(response, "RP2350")
+        self.assertContains(response, "Pico GPIO is not 5V tolerant")
+        self.assertContains(response, "pico_2w_side.png")
+        self.assertContains(response, "pico-2-w-pinout.png")
+        self.assertContains(response, "Raspberry Pi: Pico-series documentation")
 
         response = self.client.get(reverse("part_detail", kwargs={"slug": "mpu6050-module"}))
         self.assertContains(response, "+/-2g")
