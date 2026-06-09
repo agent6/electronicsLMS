@@ -1,3 +1,6 @@
+from pathlib import Path
+
+from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.utils.text import slugify
 
@@ -1904,6 +1907,48 @@ class Command(BaseCommand):
                     defaults={**defaults, "order": start_order + offset},
                 )
 
+        def add_component_assets(slug, assets):
+            component = Component.objects.get(slug=slug)
+            titles = [asset["title"] for asset in assets]
+            component.assets.filter(title__in=titles).delete()
+            start_order = component.assets.count() + 1
+            for offset, asset in enumerate(assets, start=0):
+                ComponentAsset.objects.create(
+                    component=component,
+                    order=start_order + offset,
+                    **asset,
+                )
+
+        def ky_asset_kind(index, total):
+            if index == 1:
+                return "module photo"
+            if index == 2:
+                return "pinout / module diagram"
+            if index == 3 and total >= 4:
+                return "Arduino wiring diagram"
+            if index == 4:
+                return "Raspberry Pi wiring diagram"
+            return "reference diagram"
+
+        def build_ky_assets(ky_code, display_name, source_name, source_url):
+            code = ky_code.lower().replace("ky-", "")
+            asset_root = Path(settings.BASE_DIR) / "static" / "img" / "parts" / "ky"
+            paths = sorted(asset_root.glob(f"ky-{code}-*"))
+            assets = []
+            for index, path in enumerate(paths, start=1):
+                kind = ky_asset_kind(index, len(paths))
+                assets.append(
+                    {
+                        "title": f"{ky_code} {kind.title()}",
+                        "static_asset_path": f"img/parts/ky/{path.name}",
+                        "alt_text": f"{display_name} {kind}",
+                        "caption": f"{kind.title()} for the {ky_code} {display_name}.",
+                        "source_name": source_name,
+                        "source_url": source_url,
+                    }
+                )
+            return assets
+
         ky_attribution = "Joy-IT SensorKit and ArduinoModules KY module references were used for sensor-kit part identification and wiring behavior."
         ky_modules = [
             {
@@ -2505,6 +2550,53 @@ class Command(BaseCommand):
                 arduino_resource("KY-013", "Analog Temperature Sensor", "https://arduinomodules.info/ky-013-analog-temperature-sensor-module/"),
             ],
         )
+
+        ky_asset_pages = {
+            "KY-001": ("ds18b20-temperature-sensor-module", "DS18B20 Temperature Sensor Module", "Joy-IT SensorKit KY-001 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-001"),
+            "KY-002": ("vibration-switch-module", "Vibration Switch Module", "Joy-IT SensorKit KY-002 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-002"),
+            "KY-003": ("hall-magnetic-sensor-module", "Hall Magnetic Sensor Module", "Joy-IT SensorKit KY-003 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-003"),
+            "KY-004": ("button", "Push Button Switch Module", "Joy-IT SensorKit KY-004 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-004"),
+            "KY-005": ("infrared-transmitter-module", "Infrared Transmitter Module", "Joy-IT SensorKit KY-005 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-005"),
+            "KY-006": ("buzzer", "Passive Buzzer Module", "Joy-IT SensorKit KY-006 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-006"),
+            "KY-008": ("laser-transmitter-module", "Laser Transmitter Module", "ArduinoModules KY-008 module documentation", "https://arduinomodules.info/ky-008-laser-transmitter-module/"),
+            "KY-009": ("rgb-led", "Full Color SMD RGB LED Module", "Joy-IT SensorKit KY-009 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-009"),
+            "KY-010": ("light-blocking-sensor-module", "Light Blocking Sensor Module", "Joy-IT SensorKit KY-010 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-010"),
+            "KY-011": ("two-color-led-module", "Two-Color LED Module", "Joy-IT SensorKit KY-011 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-011"),
+            "KY-012": ("buzzer", "Active Buzzer Module", "Joy-IT SensorKit KY-012 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-012"),
+            "KY-013": ("thermistor", "Analog Temperature Sensor Module", "Joy-IT SensorKit KY-013 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-013"),
+            "KY-015": ("dht11-humiture-sensor", "DHT11 Temperature and Humidity Sensor Module", "Joy-IT SensorKit KY-015 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-015"),
+            "KY-016": ("rgb-led", "3-Color LED Module", "Joy-IT SensorKit KY-016 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-016"),
+            "KY-017": ("mercury-tilt-switch-module", "Mercury Tilt Switch Module", "Joy-IT SensorKit KY-017 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-017"),
+            "KY-018": ("photoresistor", "Photoresistor Module", "Joy-IT SensorKit KY-018 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-018"),
+            "KY-019": ("relay", "5V Relay Module", "Joy-IT SensorKit KY-019 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-019"),
+            "KY-020": ("tilt-switch", "Tilt Switch Module", "Joy-IT SensorKit KY-020 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-020"),
+            "KY-021": ("reed-switch", "Mini Reed Switch Module", "Joy-IT SensorKit KY-021 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-021"),
+            "KY-022": ("infrared-receiver", "Infrared Receiver Module", "Joy-IT SensorKit KY-022 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-022"),
+            "KY-023": ("joystick-module", "Dual Axis Joystick Module", "Joy-IT SensorKit KY-023 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-023"),
+            "KY-024": ("linear-hall-sensor-module", "Linear Hall Sensor Module", "Joy-IT SensorKit KY-024 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-024"),
+            "KY-025": ("reed-switch", "Large Reed Switch Module", "Joy-IT SensorKit KY-025 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-025"),
+            "KY-026": ("flame-sensor-module", "Flame Sensor Module", "Joy-IT SensorKit KY-026 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-026"),
+            "KY-027": ("magic-light-cup-module", "Magic Light Cup Module", "Joy-IT SensorKit KY-027 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-027"),
+            "KY-028": ("digital-temperature-sensor-module", "Digital Temperature Sensor Module", "Joy-IT SensorKit KY-028 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-028"),
+            "KY-029": ("two-color-led-module", "Dual-Color LED Module", "Joy-IT SensorKit KY-029 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-029"),
+            "KY-031": ("knock-sensor-module", "Knock Sensor Module", "Joy-IT SensorKit KY-031 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-031"),
+            "KY-032": ("infrared-obstacle-avoidance-sensor", "Infrared Obstacle Avoidance Sensor", "Joy-IT SensorKit KY-032 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-032"),
+            "KY-033": ("line-tracking-sensor-module", "Line Tracking Sensor Module", "Joy-IT SensorKit KY-033 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-033"),
+            "KY-034": ("rgb-led", "Automatic Flashing Color LED Module", "Joy-IT SensorKit KY-034 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-034"),
+            "KY-035": ("analog-hall-magnetic-sensor-module", "Analog Hall Magnetic Sensor", "Joy-IT SensorKit KY-035 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-035"),
+            "KY-036": ("metal-touch-sensor", "Metal Touch Sensor", "Joy-IT SensorKit KY-036 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-036"),
+            "KY-037": ("high-sensitivity-microphone-sensor", "High Sensitivity Microphone Sensor", "Joy-IT SensorKit KY-037 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-037"),
+            "KY-038": ("microphone-sound-sensor-module", "Microphone Sound Sensor Module", "Joy-IT SensorKit KY-038 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-038"),
+            "KY-039": ("heartbeat-sensor-module", "Finger Heartbeat Sensor Module", "Joy-IT SensorKit KY-039 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-039"),
+            "KY-040": ("rotary-encoder-module", "Rotary Encoder Module", "Joy-IT SensorKit KY-040 module documentation", "https://sensorkit.joy-it.net/en/sensors/ky-040"),
+        }
+        ky_assets_by_component = {}
+        for ky_code, (slug, display_name, source_name, source_url) in ky_asset_pages.items():
+            ky_assets_by_component.setdefault(slug, []).extend(
+                build_ky_assets(ky_code, display_name, source_name, source_url)
+            )
+        for slug, assets in ky_assets_by_component.items():
+            add_component_assets(slug, assets)
 
         safety_items = [
             ("Pico GPIO is 3.3V", "Do not feed 5V signals into Raspberry Pi Pico 2 W GPIO pins."),

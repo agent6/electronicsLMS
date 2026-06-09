@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>SensorKit - SensorKit</title>
+<base href="https://sensorkit.joy-it.net/">
+<meta name="robots" content="index,follow">
+<meta name="description" content="40 Sensoren für die gängigsten Open-Source Plattformen">
+<meta name="generator" content="Contao Open Source CMS">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/bundles/contaocookiebar/default.00b012e7.css">
+<link rel="stylesheet" href="/assets/css/main.css,prism.css,menu.css,language.css,hamburger.css,header.cs...-7f07e4f1.css"><script src="/assets/js/jquery.min.js-c31f118d.js"></script><link rel="alternate" hreflang="de" href="https://sensorkit.joy-it.net/de/">
+<link rel="alternate" hreflang="x-default" href="https://sensorkit.joy-it.net/de/">
+<link rel="alternate" hreflang="en" href="https://sensorkit.joy-it.net/en/">
+<link rel="alternate" hreflang="fr" href="https://sensorkit.joy-it.net/fr/">
+
+<script src="/bundles/contaocookiebar/cookiebar.f2d9506d.js"></script>
+</head>
+<body id="top" class="line-numbers home" itemscope itemtype="http://schema.org/WebPage">
+<input type="checkbox" id="nav_opened" class="invisible">
+<div id="wrapper">
+<header id="header">
+<div class="inside">
+<label for="nav_opened" id="hamburger">
+<div id="hamburger-box">
+<div id="hamburger-inner"></div>
+</div>
+</label>
+<div class="upper">
+<div class="logo">
+<div class="inner">
+<a aria-label="SensorKit" href="/"><span class="invisible">SensorKit</span></a>
+</div>
+</div>
+</div>            </div>
+</header>
+<div id="container">
+<main id="main">
+<div class="page_header">
+<div class="image_hero">
+<h1>SensorKit</h1>
+<p>40 Sensoren für die gängigsten Open-Source Plattformen</p>
+</div>
+</div>
+<div class="inside">
+<div id="article-1" class="mod_article intro block">
+<div class="flextext content-text media media--above">
+<figure>
+<img src="/files/files/SEN-Kit02_01.png" alt width="1000" height="685">
+</figure>
+<div class="rte">
+<h2>Ein Kit für alle Anwendungen!</h2>
+<p>Entdecken Sie das Sensorkit X40 – Ihr unverzichtbares Werkzeug für die Welt der Open-Source-Plattformen. Dieses hochwertige Sensor-Set wurde speziell entwickelt, um mit den beliebtesten Einplatinen-Computern und Mikrocontrollern zu arbeiten, darunter Arduino, Raspberry Pi, Raspberry Pi Pico, Banana Pi und Micro:Bit.</p>
+<p>Mit insgesamt 40 vielseitigen Sensoren bietet das Sensorkit X40 eine beeindruckende Bandbreite an Möglichkeiten für Ihre Projekte. Löten Sie die Sensoren fest oder stecken Sie sie auf ein Breadboard, um unterschiedliche Schaltungen zu testen und spannende Experimente durchzuführen. Selbstverständlich können Sie die Module auch mit Hilfe von Dupont-Kabeln verbinden.</p>
+<p>Egal ob Sie ein erfahrener Entwickler oder ein Einsteiger in die Welt der Mikrocontroller sind – das Sensorkit X40 ist die perfekte Ergänzung für Ihre Projekte und Experimente. Tauchen Sie ein in die spannende Welt der Sensorik und erweitern Sie Ihre Fähigkeiten mit diesem vielseitigen und umfangreichen Set.</p>
+<p>Neben den einzelnen Codebeispielen können für jeden Mikrocontroller auch alle Code-Beispiele als Download-Paket heruntergeladen werden:</p>
+<p>Arduino: <a href="/files/files/SensorKit-X40_Arduino-Codes.zip">Download</a><br>Raspberry Pi: <a href="/files/files/SensorKit-X40_Raspberry-Pi-Codes.zip">Download</a><br>Micro:Bit: <a href="/files/files/SensorKit-X40_Microbit-Codes.zip">Download</a><br>Raspberry Pi Pico: <a href="/files/files/SensorKit-X40_Raspberry-Pi-Pico-Codes.zip">Download</a></p>
+</div>
+</div>
+</div>
+<div id="article-181" class="mod_article sensornav block">
+<div class="content-hyperlink">
+<h2>KY-001 Temperatursensor &#40;DS18B20&#41;</h2>
+<a href='/de/sensors/ky-001' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-001/KY-001.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-002 Erschütterungs-Schalter</h2>
+<a href='/de/sensors/ky-002' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-002/KY-002.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-003 Hall-Magnetfeldsensor</h2>
+<a href='/de/sensors/ky-003' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-003/KY-003.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-004 Taster</h2>
+<a href='/de/sensors/ky-004' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-004/KY-004.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-005 Infrarot-Transmitter</h2>
+<a href='/de/sensors/ky-005' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-005/KY-005.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-006 Passiver Piezo-Buzzer</h2>
+<a href='/de/sensors/ky-006' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-006/KY-006.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-009 RGB SMD-LED</h2>
+<a href='/de/sensors/ky-009' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-009/KY-009.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-010 Lichtschranke</h2>
+<a href='/de/sensors/ky-010' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-010/KY-010.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-011 2-Farben 5mm LED</h2>
+<a href='/de/sensors/ky-011' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-011/KY-011.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-012 Aktiver Piezo-Buzzer</h2>
+<a href='/de/sensors/ky-012' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-012/KY-012.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-013 Temperatursensor &#40;NTC&#41;</h2>
+<a href='/de/sensors/ky-013' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-013/KY-013.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-015 Kombi-Sensor &#40;Temperatur &amp; Feuchtigkeit&#41;</h2>
+<a href='/de/sensors/ky-015' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-015/KY-015.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-016 RGB 5mm LED</h2>
+<a href='/de/sensors/ky-016' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-016/KY-016.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-017 Neigungsschalter</h2>
+<a href='/de/sensors/ky-017' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-017/KY-017.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-018 Fotowiderstand</h2>
+<a href='/de/sensors/ky-018' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-018/KY-018.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-019 5 V Relais</h2>
+<a href='/de/sensors/ky-019' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-019/KY-019.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-020 Neigungsschalter</h2>
+<a href='/de/sensors/ky-020' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-020/KY-020.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-021 Mini Reed-Magnet</h2>
+<a href='/de/sensors/ky-021' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-021/KY-021.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-022 Infrarot-Receiver</h2>
+<a href='/de/sensors/ky-022' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-022/KY-022.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-023 Joystick &#40;X-Y-Achsen&#41;</h2>
+<a href='/de/sensors/ky-023' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-023/KY-023.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-024 Linearer, magnetischer Hall-Sensor</h2>
+<a href='/de/sensors/ky-024' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-024/KY-024.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-025 Analoger Reed-Magnetsensor</h2>
+<a href='/de/sensors/ky-025' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-025/KY-025.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-026 Analoger Flammensensor</h2>
+<a href='/de/sensors/ky-026' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-026/KY-026.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-027 Magic Light Cup Modul</h2>
+<a href='/de/sensors/ky-027' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-027/KY-027.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-028 Temperatursensor &#40;Thermistor&#41;</h2>
+<a href='/de/sensors/ky-028' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-028/KY-028.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-029 2-Farben 3mm LED</h2>
+<a href='/de/sensors/ky-029' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-029/KY-029.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-031 Klopfsensor</h2>
+<a href='/de/sensors/ky-031' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-031/KY-031.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-032 Hindernis-Detektor</h2>
+<a href='/de/sensors/ky-032' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-032/KY-032.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-033 Linetracking-Sensor</h2>
+<a href='/de/sensors/ky-033' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-033/KY-033.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-034 7-Farben Flash-LED</h2>
+<a href='/de/sensors/ky-034' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-034/KY-034.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-035 Bihor Magnetsensor</h2>
+<a href='/de/sensors/ky-035' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-035/KY-035.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-036 Metall-Touchsensor</h2>
+<a href='/de/sensors/ky-036' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-036/KY-036.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-037 Mikrofon Soundsensor &#40;Hohe Empfindlichkeit&#41;</h2>
+<a href='/de/sensors/ky-037' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-037/KY-037.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-038 Mikrofon Soundsensor</h2>
+<a href='/de/sensors/ky-038' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-038/KY-038.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-039 Herzschlagsensor</h2>
+<a href='/de/sensors/ky-039' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-039/KY-039-02.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-040 Kodierter Drehschalter &#40;Rotary Encoder&#41;</h2>
+<a href='/de/sensors/ky-040' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-040/KY-040.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-050 Ultraschall-Abstandssensor</h2>
+<a href='/de/sensors/ky-050' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-050/KY-050.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-051 Voltage Translator / Level Shifter</h2>
+<a href='/de/sensors/ky-051' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-051/KY-051.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-052 Drucksensor / Temperatursensor &#40;BMP280&#41;</h2>
+<a href='/de/sensors/ky-052' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-052/KY-052.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-053 Analog-Digital Converter</h2>
+<a href='/de/sensors/ky-053' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-053/358px-KY-0053.png'>
+</figure>
+</div>
+<div class="content-hyperlink">
+<h2>KY-054 Fototransistor</h2>
+<a href='/de/sensors/ky-054' class='hyperlink_img'></a>
+<figure class="image_container">
+<img src='files/files/sensors/KY-054/KY-054.png'>
+</figure>
+</div>
+</div>
+</div>
+</main>
+<aside id="left">
+<div class="inside">
+<div class="upper">
+<div class="logo">
+<div class="inner">
+<a aria-label="SensorKit" href="/"><span class="invisible">SensorKit</span></a>
+</div>
+</div>
+</div>
+<div class="scrollcontainer">
+<!-- indexer::stop -->
+<nav class="mod_changelanguage block">
+<ul class="level_1">
+<li class="lang-de active"><strong class="lang-de active" aria-current="page">Deutsch (German)</strong></li>
+<li class="lang-en"><a href="/en/" class="lang-en" hreflang="en" aria-label="Gehe zur aktuellen Seite in Englisch">Englisch (English)</a></li>
+<li class="lang-fr"><a href="/fr/" class="lang-fr" hreflang="fr" aria-label="Gehe zur aktuellen Seite in Französisch">Französisch (French)</a></li>
+</ul>
+</nav>
+<!-- indexer::continue -->
+<!-- indexer::stop -->
+<nav class="mod_navigation block">
+<a href="/de/#skipNavigation1" class="invisible">Navigation überspringen</a>
+<ul class="level_1">
+<li class="active submenu home"><strong class="active submenu home" aria-current="page" aria-haspopup="true">Home</strong>
+<ul class="level_2">
+<li><a href="/de/sensors/ky-001">KY-001 Temperatursensor &#40;DS18B20&#41;</a></li>
+<li><a href="/de/sensors/ky-002">KY-002 Erschütterungs-Schalter</a></li>
+<li><a href="/de/sensors/ky-003">KY-003 Hall-Magnetfeldsensor</a></li>
+<li><a href="/de/sensors/ky-004">KY-004 Taster</a></li>
+<li><a href="/de/sensors/ky-005">KY-005 Infrarot-Transmitter</a></li>
+<li><a href="/de/sensors/ky-006">KY-006 Passiver Piezo-Buzzer</a></li>
+<li><a href="/de/sensors/ky-009">KY-009 RGB SMD-LED</a></li>
+<li><a href="/de/sensors/ky-010">KY-010 Lichtschranke</a></li>
+<li><a href="/de/sensors/ky-011">KY-011 2-Farben 5mm LED</a></li>
+<li><a href="/de/sensors/ky-012">KY-012 Aktiver Piezo-Buzzer</a></li>
+<li><a href="/de/sensors/ky-013">KY-013 Temperatursensor &#40;NTC&#41;</a></li>
+<li><a href="/de/sensors/ky-015">KY-015 Kombi-Sensor &#40;Temperatur & Feuchtigkeit&#41;</a></li>
+<li><a href="/de/sensors/ky-016">KY-016 RGB 5mm LED</a></li>
+<li><a href="/de/sensors/ky-017">KY-017 Neigungsschalter</a></li>
+<li><a href="/de/sensors/ky-018">KY-018 Fotowiderstand</a></li>
+<li><a href="/de/sensors/ky-019">KY-019 5V Relais</a></li>
+<li><a href="/de/sensors/ky-020">KY-020 Neigungsschalter</a></li>
+<li><a href="/de/sensors/ky-021">KY-021 Mini Reed-Magnet</a></li>
+<li><a href="/de/sensors/ky-022">KY-022 Infrarot-Receiver</a></li>
+<li><a href="/de/sensors/ky-023">KY-023 Joystick &#40;X-Y-Achsen&#41;</a></li>
+<li><a href="/de/sensors/ky-024">KY-024 Linearer, magnetischer Hall-Sensor</a></li>
+<li><a href="/de/sensors/ky-025">KY-025 Analoger Reed-Magnetsensor</a></li>
+<li><a href="/de/sensors/ky-026">KY-026 Analoger Flammensensor</a></li>
+<li><a href="/de/sensors/ky-027">KY-027 Magic Light Cup</a></li>
+<li><a href="/de/sensors/ky-028">KY-028 Temperatursensor &#40;Thermistor&#41;</a></li>
+<li><a href="/de/sensors/ky-029">KY-029 2-Farben 3mm LED</a></li>
+<li><a href="/de/sensors/ky-031">KY-031 Klopfsensor</a></li>
+<li><a href="/de/sensors/ky-032">KY-032 Hindernis-Detektor</a></li>
+<li><a href="/de/sensors/ky-033">KY-033 Linetracking-Sensor</a></li>
+<li><a href="/de/sensors/ky-034">KY-034 7-Farben Flash-LED</a></li>
+<li><a href="/de/sensors/ky-035">KY-035 Bihor Magnetsensor</a></li>
+<li><a href="/de/sensors/ky-036">KY-036 Metall-Touchsensor</a></li>
+<li><a href="/de/sensors/ky-037">KY-037 Mikrofon Soundsensor &#40;hohe Empfindlichkeit&#41;</a></li>
+<li><a href="/de/sensors/ky-038">KY-038 Mikrofon Soundsensor</a></li>
+<li><a href="/de/sensors/ky-039">KY-039 Herzschlagsensor</a></li>
+<li><a href="/de/sensors/ky-040">KY-040 Kodierter Drehschalter &#40;Rotary Encoder&#41;</a></li>
+<li><a href="/de/sensors/ky-050">KY-050 Ultraschall-Abstandssensor</a></li>
+<li><a href="/de/sensors/ky-051">KY-051 Voltage Translator / Level Shifter</a></li>
+<li><a href="/de/sensors/ky-052">KY-052 Drucksensor / Temperatursensor &#40;BMP280&#41;</a></li>
+<li><a href="/de/sensors/ky-053">KY-053 Analog Digital Converter</a></li>
+<li><a href="/de/sensors/ky-054">KY-054 Fototransistor</a></li>
+</ul>
+</li>
+<li class="sibling"><a href="/de/data-privacy" class="sibling">Datenschutzerklärung</a></li>
+<li class="sibling"><a href="/de/legal-disclosure" class="sibling">Impressum</a></li>
+</ul>
+<span id="skipNavigation1" class="invisible"></span>
+</nav>
+<!-- indexer::continue -->
+<div class="copyright">
+<div class="inside">
+<p>© 2026 Copyright by <a href="https://joy-it.net">Joy-IT</a></p>
+</div>
+</div>
+</div>                </div>
+</aside>
+</div>
+</div>
+<script src="/files/theme/js/prism.js?v=29ffada5"></script><script src="/files/theme/js/perfect-scrollbar.min.js?v=0019ad46"></script><script src="/files/theme/js/scrollbar.js?v=455ccbb2"></script><script src="/files/theme/js/sbcselection.js?v=aebae1a8"></script><script src="/files/theme/js/makecoderenderer.js?v=4ac710f8"></script>
+<!-- indexer::stop -->
+<div class="contao-cookiebar cc-wrap cc-bottom" role="complementary" aria-describedby="cookiebar-desc" data-nosnippet>
+    <div class="cc-inner" aria-live="assertive" role="alert">
+        <div id="cookiebar-desc" class="cc-head">
+                            <p><strong>Cookie- und Datenschutzhinweise</strong></p>
+                    </div>
+
+                    <div class="cc-groups">
+                                    <div class="cc-group">
+                            <input type="checkbox" name="group[]" id="g1" value="1" data-toggle-cookies disabled checked>
+                        <label for="g1" class="group">Essenziell</label>
+
+                            <button class="cc-detail-btn cc-focus" data-toggle-group aria-expanded="false" aria-controls="cg1">
+                    <span>Details einblenden<span class="cc-invisible"> für Essenziell</span></span>
+                    <span>Details ausblenden<span class="cc-invisible"> für Essenziell</span></span>
+                </button>
+            
+            <div id="cg1" class="cc-cookies toggle-group">
+                    
+                    <div class="cc-cookie">
+            <input type="checkbox" name="cookie[]" id="c2" value="2"  disabled checked>
+            <label for="c2" class="cookie">Contao HTTPS CSRF Token</label>
+            <p>Schützt vor Cross-Site-Request-Forgery Angriffen.</p>
+            <div class="cc-cookie-info"><div><span>Speicherdauer:</span> Dieses Cookie bleibt nur für die aktuelle Browsersitzung bestehen.</div></div>                    </div>
+                    <div class="cc-cookie">
+            <input type="checkbox" name="cookie[]" id="c3" value="3"  disabled checked>
+            <label for="c3" class="cookie">PHP SESSION ID</label>
+            <p>Speichert die aktuelle PHP-Session.</p>
+            <div class="cc-cookie-info"><div><span>Speicherdauer:</span> Dieses Cookie bleibt nur für die aktuelle Browsersitzung bestehen.</div></div>                    </div>
+    
+            </div>
+        </div>
+    
+            </div>
+        
+        <div class="cc-footer highlight">
+                            <button class="cc-btn cc-focus save" data-save>Auswahl speichern</button>
+                <button class="cc-btn cc-focus success" data-accept-all>Alle akzeptieren</button>
+                                </div>
+
+        <div class="cc-info">
+                            <p>Diese Webseite verwendet Cookies, um bestimmte Funktionen zu ermöglichen und das Angebot zu verbessern.</p>
+                                    <a class="cc-focus" href="https://sensorkit.joy-it.net/de/data-privacy">Datenschutzerklärung</a>
+                                    <a class="cc-focus" href="https://sensorkit.joy-it.net/de/legal-disclosure">Impressum</a>
+                                    </div>
+    </div>
+</div>
+<!-- indexer::continue -->
+
+    <script>var cookiebar = new ContaoCookiebar({configId:1,pageId:1,hideOnInit:0,blocking:0,focusTrap:1,version:1,lifetime:63072000,consentLog:0,token:'ccb_contao_token',doNotTrack:0,currentPageId:2,excludedPageIds:null,cookies:[],configs:[],disableTracking:0,texts:{acceptAndDisplay:'tl_cookiebar.acceptAndDisplayLabel'}});</script>
+</body>
+</html>
